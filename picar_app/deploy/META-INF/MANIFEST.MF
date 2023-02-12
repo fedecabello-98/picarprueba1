@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: app.VentanaPrincipal
+Class-Path: lib/commons-collections4-4.1.jar lib/mysql-connector-java-8.0.25.jar lib/poi-3.16.jar lib/poi-ooxml-3.16.jar lib/poi-ooxml-schemas-3.16.jar lib/xmlbeans-2.6.0.jar lib/jxl-2.6.12.1.jar
+
+
