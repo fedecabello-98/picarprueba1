@@ -37,7 +37,7 @@ public class RemitoBuscado extends javax.swing.JFrame implements Printable {
                 Object [] registros = new Object[5];
                 DefaultTableModel modelo = new DefaultTableModel(null,nombresColumnas);
                 String nremito = BuscarRemito.jTextField1.getText();
-                String sql = "select remitos.codigo_id,productos.descripcion,remitos.cantidad,productos.precio,remitos.cantidad*productos.precio from picar_db.remitos join picar_db.productos on remitos.codigo_id=productos.codigo where remitos.idremitos="+nremito+";";
+                String sql = "select remitos.codigo_id,remitos.descripcion_remito,remitos.cantidad,remitos.precio_remito,remitos.cantidad*remitos.precio_remito from picar_db.remitos where remitos.idremitos="+nremito+";";
                 Connection cn = null;
                 PreparedStatement pst = null;
                 ResultSet rs = null;
@@ -49,10 +49,10 @@ public class RemitoBuscado extends javax.swing.JFrame implements Printable {
                     while(rs.next())
                     {
                         registros[0] = rs.getString("codigo_id");
-                        registros[1] = rs.getString("descripcion");
+                        registros[1] = rs.getString("descripcion_remito");
                         registros[2] = rs.getString("cantidad");
-                        registros[3] = rs.getString("precio");
-                        registros[4] = rs.getFloat("remitos.cantidad*productos.precio");
+                        registros[3] = rs.getString("precio_remito");
+                        registros[4] = rs.getFloat("remitos.cantidad*remitos.precio_remito");
                         modelo.addRow(registros);
                     }
                 }
