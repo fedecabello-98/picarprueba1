@@ -294,6 +294,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             btnproductos.setEnabled(false);
             btnventas.setEnabled(false);
             btncargar.setEnabled(false);
+            btncompras.setEnabled(false);
+            btninformes.setEnabled(false);
             try {
                 Workbook archivoExcel = Workbook.getWorkbook(new File(archivoDestino));
                 for (int hojas = 0; hojas < archivoExcel.getNumberOfSheets(); hojas++) {
@@ -502,6 +504,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 btnclientes.setEnabled(false);
                 btnproductos.setEnabled(false);
                 btnventas.setEnabled(false);
+                btncompras.setEnabled(false);
+                btninformes.setEnabled(false);
                 btncargar.setEnabled(false);
                 jLabel3.setVisible(true);
                 try {
