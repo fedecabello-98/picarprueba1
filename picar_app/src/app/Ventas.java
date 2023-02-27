@@ -141,7 +141,7 @@ public class Ventas extends javax.swing.JFrame {
         jLabel3.setText("Tipo de factura:");
 
         jComboBox1.setFont(new java.awt.Font("Calibri", 0, 22)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "REMITO", "FACTURA B", "FACTURA C" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "REMITO" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -233,12 +233,12 @@ public class Ventas extends javax.swing.JFrame {
     public class BuscarClienteC{
         public BuscarClienteC(){
         }
-        public String buscarCliente(String clienteafacturar, String tipofactura){
+        public String buscarCliente(String clienteafacturar){
             try{
                 Statement st = LlenarCombo.conexion.createStatement();
                 ResultSet registrocliente = st.executeQuery("SELECT * FROM picar_db.clientes WHERE clientes.idcliente="+clienteafacturar+";");
                 if(registrocliente.next()){
-                    if(tipofactura=="REMITO"){
+                    
                     FacturacionRemito remito = new FacturacionRemito();
                     remito.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
                     remito.setLocationRelativeTo(null);
@@ -263,7 +263,7 @@ public class Ventas extends javax.swing.JFrame {
                     remito.jLabel4.setText(sqlnombre);
                     remito.jLabel6.setText(sqlalias);
                     dispose();
-                    }
+                    
                 }else{
                     JOptionPane.showMessageDialog(null, "El cliente N°"+clienteafacturar+" ingresado no se encuentra en el sistema.", "ERROR", JOptionPane.ERROR_MESSAGE);
                     jTextField1.setText("");
@@ -279,22 +279,7 @@ public class Ventas extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         String clienteafacturar = this.jTextField1.getText();
-        String tipofactura = this.jComboBox1.getSelectedItem().toString().toUpperCase();
-        bcliente.buscarCliente(clienteafacturar.replace(" ", "").trim(),tipofactura);
-        if(tipofactura=="FACTURA B"){
-            FacturacionB facturab = new FacturacionB();
-            this.dispose();
-            facturab.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-            facturab.setLocationRelativeTo(null);
-            facturab.setVisible(true);
-        }
-        if(tipofactura=="FACTURA C"){
-            FacturacionC facturac = new FacturacionC();
-            this.dispose();
-            facturac.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-            facturac.setLocationRelativeTo(null);
-            facturac.setVisible(true);
-        }
+        bcliente.buscarCliente(clienteafacturar.replace(" ", "").trim());
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

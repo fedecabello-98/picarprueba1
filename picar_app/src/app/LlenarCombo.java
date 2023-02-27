@@ -166,4 +166,24 @@ public class LlenarCombo {
         }
         return traerestado;
     }
+    public static ArrayList<String> llenar_combo8(){
+        ArrayList<String> traerproveedor = new ArrayList<String>();
+        try {
+            resultado = sentencia.executeQuery("SELECT * FROM picar_db.proveedores;");
+        } catch (Exception e) {
+            System.out.println("ERROR: "+e);
+            JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+        try {
+            while(resultado.next()){
+                traerproveedor.add(resultado.getString("proveedor"));
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR: "+e);
+            JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+        return traerproveedor;
+    }
 }

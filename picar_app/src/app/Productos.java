@@ -407,7 +407,7 @@ public class Productos extends javax.swing.JFrame {
                     return String.class;
                     }}
             };
-            String sql = "SELECT * FROM picar_db.productos ORDER BY productos.descripcion ASC;";
+            String sql = "SELECT * FROM picar_db.productos WHERE productos.codigo!='0' ORDER BY productos.descripcion ASC;";
             Connection cn = null;
             PreparedStatement pst = null;
             ResultSet rs = null;

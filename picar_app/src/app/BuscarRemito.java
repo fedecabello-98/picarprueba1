@@ -303,7 +303,7 @@ public class BuscarRemito extends javax.swing.JDialog {
             String [] nombresColumnas = {"N° de remito","Nombre del cliente","Apellido del cliente","Fecha de emisión","Total","Vendedor a cargo"};
             Object [] registros = new Object[6];
             DefaultTableModel modelo = new DefaultTableModel(null,nombresColumnas);
-            String sql = "select remitos.idremitos,clientes.nombre,clientes.apellido,date_format(remitos.fecharemito,'%d/%m/%Y'),sum(productos.precio*remitos.cantidad),vendedores.vendedor from picar_db.remitos join picar_db.clientes on remitos.cliente_id=clientes.idcliente join picar_db.productos on remitos.codigo_id=productos.codigo join picar_db.vendedores on remitos.vendedor_id=vendedores.idvendedores group by remitos.idremitos order by remitos.fecharemito desc;";
+            String sql = "select remitos.idremitos,clientes.nombre,clientes.apellido,date_format(remitos.fecharemito,'%d/%m/%Y'),sum(productos.precio*remitos.cantidad),vendedores.vendedor from picar_db.remitos join picar_db.clientes on remitos.cliente_id=clientes.idcliente join picar_db.productos on remitos.codigo_id=productos.codigo join picar_db.vendedores on remitos.vendedor_id=vendedores.idvendedores where idremitos!=0 group by remitos.idremitos order by remitos.fecharemito desc;";
             Connection cn = null;
             PreparedStatement pst = null;
             ResultSet rs = null;

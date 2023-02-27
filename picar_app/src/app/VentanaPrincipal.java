@@ -524,6 +524,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void btncomprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncomprasActionPerformed
         // TODO add your handling code here:
+        Compras compras = new Compras();
+        compras.setLocationRelativeTo(null);
+        compras.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btncomprasActionPerformed
 
     private void btninformesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btninformesActionPerformed
