@@ -411,7 +411,7 @@ public class RemitoModificado extends javax.swing.JFrame implements Printable {
         // TODO add your handling code here:
         this.dispose();
         String nremito = FacturacionRemitoModificado.titulo1.getText();
-        JOptionPane.showMessageDialog(null,"REMITO N°"+nremito+" modificado con éxito.","IMPRESIÓN EXITOSA",JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null,"REMITO N°"+nremito+" modificado con éxito.","ACTUALIZACIÓN EXITOSA",JOptionPane.INFORMATION_MESSAGE);
         Ventas ventas = new Ventas();
         ventas.setLocationRelativeTo(null);
         ventas.setVisible(true);

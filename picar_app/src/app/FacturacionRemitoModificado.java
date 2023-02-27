@@ -43,8 +43,8 @@ DefaultTableModel modelo;
                 {
                     registros[0] = rs.getString("codigo_id");
                     registros[1] = rs.getString("descripcion_remito");
-                    registros[2] = rs.getString("cantidad");
-                    registros[3] = rs.getString("precio_remito");
+                    registros[2] = rs.getFloat("cantidad");
+                    registros[3] = rs.getFloat("precio_remito");
                     registros[4] = rs.getFloat("remitos.cantidad*remitos.precio_remito");
                     modelo.addRow(registros);
                 }

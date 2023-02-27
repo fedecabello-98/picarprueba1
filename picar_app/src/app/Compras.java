@@ -265,6 +265,8 @@ DefaultTableModel modelo;
         jLabel5.setText("Proveedor:");
 
         jComboBox1.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PROVEEDOR" }));
+        jComboBox1.setToolTipText("");
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -396,6 +398,11 @@ DefaultTableModel modelo;
         jMenu2.setText("Compras generadas");
 
         jMenuItem2.setText("Buscar");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem2);
 
         jMenuBar1.add(jMenu2);
@@ -875,6 +882,15 @@ DefaultTableModel modelo;
         }
         jLabel7.setText("TOTAL DE LA COMPRA: $"+totalizado);
     }//GEN-LAST:event_jTable2FocusGained
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        BuscarCompra scompra = new BuscarCompra(this,true);
+        this.dispose();
+        scompra.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        scompra.setLocationRelativeTo(null);
+        scompra.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
