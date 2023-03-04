@@ -186,4 +186,45 @@ public class LlenarCombo {
         }
         return traerproveedor;
     }
+    public static ArrayList<String> llenar_combo9(){
+        ArrayList<String> traerfechas = new ArrayList<String>();
+        try {
+            sentencia.executeUpdate("SET lc_time_names = 'es_AR';");
+            resultado = sentencia.executeQuery("select UPPER(DATE_FORMAT(fecharemito,'%M')) from picar_db.remitos group by remitos.fecharemito order by month(fecharemito) asc;");
+        } catch (Exception e) {
+            System.out.println("ERROR: "+e);
+            JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+        try {
+            while(resultado.next()){
+                traerfechas.add(resultado.getString("UPPER(DATE_FORMAT(fecharemito,'%M'))"));
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR: "+e);
+            JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+        return traerfechas;
+    }
+    public static ArrayList<String> llenar_combo10(){
+        ArrayList<String> traeranios = new ArrayList<String>();
+        try {
+            resultado = sentencia.executeQuery("select DATE_FORMAT(fecharemito,'%Y') from picar_db.remitos group by YEAR(fecharemito) order by YEAR(fecharemito) asc;");
+        } catch (Exception e) {
+            System.out.println("ERROR: "+e);
+            JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+        try {
+            while(resultado.next()){
+                traeranios.add(resultado.getString("DATE_FORMAT(fecharemito,'%Y')"));
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR: "+e);
+            JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+        return traeranios;
+    }
 }

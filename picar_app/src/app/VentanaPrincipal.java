@@ -532,6 +532,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void btninformesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btninformesActionPerformed
         // TODO add your handling code here:
+        Informes informes = new Informes();
+        informes.setLocationRelativeTo(null);
+        informes.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btninformesActionPerformed
 
     /**

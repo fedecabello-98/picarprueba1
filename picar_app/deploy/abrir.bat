@@ -1,1 +1,0 @@
-java -jar archive1.rar
