@@ -27,6 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 
+
 import jxl.*;
 
 //import org.apache.poi.ss.usermodel.Cell;
@@ -46,7 +47,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     public static final String URL = "jdbc:mysql://localhost:3306/picar_db";
     public static final String USERNAME = "root";
-    public static final String PASSWORD = "1508";
+    public static final String PASSWORD = "losredondos123";
+    public static final String URLSQLSERVER = "jdbc:sqlserver://FEDERYZEN3\\SQLEXPRESS:49500;"
+                        + "database=picar_db;"
+                        + "user=usuarionuevo;"
+                        + "password=losredondos123;"
+                        + "encrypt=true;"
+                        + "trustServerCertificate=true;"
+                        + "loginTimeout=15;";
 
     public VentanaPrincipal() {
         initComponents();
@@ -66,11 +74,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
 
     public static Connection getConection() {
-        Connection con = null;
         try {
             //Class.forName("com.mysql.jdbc.Driver");
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            //Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(URLSQLSERVER);
             btnclientes.setEnabled(true);
             btnproductos.setEnabled(true);
             btnventas.setEnabled(true);
@@ -78,11 +85,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             btninformes.setEnabled(true);
             jLabel2.setVisible(false);
             btncargar.setEnabled(true);
+            return con;
         } catch (Exception e) {
             System.out.println("ERROR: "+e);
             JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
-        return con;
     }
 
     /** This method is called from within the constructor to

@@ -12,12 +12,19 @@ public class LlenarCombo {
        static Statement sentencia;
        static ResultSet resultado;
        public static void conectar(){
-           String ruta="jdbc:mysql://";
-           String user="root";
-           String pass="1508";
+           //String ruta="jdbc:mysql://";
+           //String user="root";
+           //String pass="";
+           String URLSQLSERVER = "jdbc:sqlserver://FEDERYZEN3\\SQLEXPRESS:49500;"
+                        + "database=picar_db;"
+                        + "user=usuarionuevo;"
+                        + "password=losredondos123;"
+                        + "encrypt=true;"
+                        + "trustServerCertificate=true;"
+                        + "loginTimeout=15;";
            try {
-               Class.forName("com.mysql.cj.jdbc.Driver");
-               conexion=DriverManager.getConnection(ruta,user,pass); 
+               //Class.forName("com.mysql.cj.jdbc.Driver");
+               conexion=DriverManager.getConnection(URLSQLSERVER);
                sentencia= conexion.createStatement();
            } catch (Exception e) {
                System.out.println("ERROR: "+e);
