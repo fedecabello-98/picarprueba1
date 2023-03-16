@@ -45,9 +45,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     /** Creates new form VentanaPrincipal */
 
-    public static final String URL = "jdbc:mysql://localhost:3306/picar_db";
-    public static final String USERNAME = "root";
-    public static final String PASSWORD = "losredondos123";
+    public static final String URL = "jdbc:mysql://localhost:3307/picar_db";
+    public static final String USER = "root";
+    public static final String PASS = "1508";
     public static final String URLSQLSERVER = "jdbc:sqlserver://FEDERYZEN3\\SQLEXPRESS:49500;"
                         + "database=picar_db;"
                         + "user=usuarionuevo;"
@@ -77,7 +77,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         try {
             //Class.forName("com.mysql.jdbc.Driver");
             //Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(URLSQLSERVER);
+            Connection con = DriverManager.getConnection(URL,USER,PASS);
             btnclientes.setEnabled(true);
             btnproductos.setEnabled(true);
             btnventas.setEnabled(true);
@@ -289,12 +289,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             String sql0 = "SET SQL_SAFE_UPDATES=0;";
             PreparedStatement sqlcero = conectar.prepareStatement(sql0);
             sqlcero.executeUpdate();
+            
             //String sql1 = "DELETE FROM productos;";
             //PreparedStatement sqluno = conectar.prepareStatement(sql1);
             //sqluno.executeUpdate();
             //String sql2 = "ALTER TABLE prueba1 auto_increment=0;";
             /*PreparedStatement sqldos = conectar.prepareStatement(sql2);
             sqldos.executeUpdate();*/
+            
             String iniciovarchar = "ALTER TABLE productos CHANGE COLUMN precio precio VARCHAR(10) NULL DEFAULT NULL;";
             PreparedStatement pst = conectar.prepareStatement(iniciovarchar);
             pst.executeUpdate();

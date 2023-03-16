@@ -12,9 +12,10 @@ public class LlenarCombo {
        static Statement sentencia;
        static ResultSet resultado;
        public static void conectar(){
-           //String ruta="jdbc:mysql://";
-           //String user="root";
-           //String pass="";
+           //String URL="jdbc:mysql://";
+           String URL = "jdbc:mysql://localhost:3307/picar_db";
+           String USER="root";
+           String PASS="1508";
            String URLSQLSERVER = "jdbc:sqlserver://FEDERYZEN3\\SQLEXPRESS:49500;"
                         + "database=picar_db;"
                         + "user=usuarionuevo;"
@@ -23,8 +24,8 @@ public class LlenarCombo {
                         + "trustServerCertificate=true;"
                         + "loginTimeout=15;";
            try {
-               //Class.forName("com.mysql.cj.jdbc.Driver");
-               conexion=DriverManager.getConnection(URLSQLSERVER);
+               Class.forName("com.mysql.cj.jdbc.Driver");
+               conexion=DriverManager.getConnection(URL,USER,PASS);
                sentencia= conexion.createStatement();
            } catch (Exception e) {
                System.out.println("ERROR: "+e);
@@ -233,5 +234,25 @@ public class LlenarCombo {
             System.exit(0);
         }
         return traeranios;
+    }
+    public static ArrayList<String> llenar_combo11(){
+        ArrayList<String> traercheques = new ArrayList<String>();
+        try {
+            resultado = sentencia.executeQuery("select * from picar_db.cheques where cheques.idcheques!=0 order by cheques.idcheques asc;");
+        } catch (Exception e) {
+            System.out.println("ERROR: "+e);
+            JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+        try {
+            while(resultado.next()){
+                traercheques.add(resultado.getString("idcheques"));
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR: "+e);
+            JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+        return traercheques;
     }
 }

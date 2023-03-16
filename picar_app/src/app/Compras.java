@@ -275,9 +275,8 @@ DefaultTableModel modelo;
             }
         });
 
-        jButton3.setBackground(new java.awt.Color(0, 153, 0));
+        jButton3.setBackground(new java.awt.Color(255, 114, 0));
         jButton3.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Generar compra");
         jButton3.setEnabled(false);
         jButton3.addActionListener(new java.awt.event.ActionListener() {

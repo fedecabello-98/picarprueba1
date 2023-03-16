@@ -866,6 +866,7 @@ public class Clientes extends javax.swing.JFrame {
         ResultSet idcliente = st.executeQuery("select picar_db.clientes.idcliente from picar_db.clientes order by picar_db.clientes.idcliente desc limit 1;");
         if(idcliente.next()){
         String registroid = idcliente.getString("idcliente");
+        st.executeUpdate("INSERT INTO picar_db.pagosclientes VALUES (0,"+registroid+",'',0,0,0,current_date());");
         ultimoMensajeMySQL="El cliente "+apellido+", "+nombre+" fue agregado con éxito al sistema.\nSu ID es: "+registroid+".";
         JOptionPane.showMessageDialog(null, ultimoMensajeMySQL, "INFORMACIÓN DEL SISTEMA", JOptionPane.INFORMATION_MESSAGE);
         jTextField1.setText(registroid);
