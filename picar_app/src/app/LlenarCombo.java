@@ -238,7 +238,7 @@ public class LlenarCombo {
     public static ArrayList<String> llenar_combo11(){
         ArrayList<String> traercheques = new ArrayList<String>();
         try {
-            resultado = sentencia.executeQuery("select * from picar_db.cheques where cheques.idcheques!=0 order by cheques.idcheques asc;");
+            resultado = sentencia.executeQuery("select * from picar_db.cheques where cheques.idcheques!=0 order by cheques.idcheques DESC;");
         } catch (Exception e) {
             System.out.println("ERROR: "+e);
             JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);

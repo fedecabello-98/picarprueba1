@@ -260,6 +260,11 @@ public class PagosClientes extends javax.swing.JFrame {
         jMenu1.add(jMenuItem1);
 
         jMenuItem3.setText("Mostrar todos");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem3);
 
         jMenuBar1.add(jMenu1);
@@ -267,6 +272,11 @@ public class PagosClientes extends javax.swing.JFrame {
         jMenu2.setText("Pagos registrados");
 
         jMenuItem2.setText("Mostrar todos");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem2);
 
         jMenuBar1.add(jMenu2);
@@ -685,6 +695,22 @@ public class PagosClientes extends javax.swing.JFrame {
             }    
         }
     }//GEN-LAST:event_formWindowActivated
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        ChequesMostrarTodos chequesall = new ChequesMostrarTodos(this,true);
+        //chequesall.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        chequesall.setLocationRelativeTo(null);
+        chequesall.setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        PagosClientesMostrarTodos pagoscliall = new PagosClientesMostrarTodos(this,true);
+        //chequesall.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        pagoscliall.setLocationRelativeTo(null);
+        pagoscliall.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
