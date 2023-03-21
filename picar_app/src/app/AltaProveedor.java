@@ -103,7 +103,7 @@ public class AltaProveedor extends javax.swing.JDialog {
 
         jLabel1.setBackground(new java.awt.Color(204, 255, 51));
         jLabel1.setFont(new java.awt.Font("Calibri", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(174, 88, 185));
+        jLabel1.setForeground(new java.awt.Color(255, 114, 0));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("GESTIÓN DE PROVEEDORES");
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);

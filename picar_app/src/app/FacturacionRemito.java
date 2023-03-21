@@ -111,7 +111,7 @@ DefaultTableModel modelo;
         jButton1.setBackground(new java.awt.Color(255, 0, 0));
         jButton1.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Salir");
+        jButton1.setText("Volver");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -531,6 +531,7 @@ DefaultTableModel modelo;
         productos.jButton4.setVisible(false);
         productos.jButton3.setVisible(false);
         productos.jTextField3.setEditable(false);
+        productos.jMenu1.setVisible(false);
         //this.setFocusable(false);
         //productos.jTextField1.requestFocus();
     }//GEN-LAST:event_jButton4ActionPerformed

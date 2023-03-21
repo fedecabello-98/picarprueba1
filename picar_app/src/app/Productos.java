@@ -175,7 +175,7 @@ public class Productos extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setBackground(new java.awt.Color(255, 102, 0));
+        jButton3.setBackground(new java.awt.Color(0, 153, 255));
         jButton3.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton3.setText("Modificar stock");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -196,8 +196,9 @@ public class Productos extends javax.swing.JFrame {
         jTable1.setEditingRow(0);
         jScrollPane1.setViewportView(jTable1);
 
-        jButton4.setBackground(new java.awt.Color(255, 204, 0));
+        jButton4.setBackground(new java.awt.Color(0, 153, 255));
         jButton4.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(255, 255, 255));
         jButton4.setText("Informe de stock");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -687,7 +688,7 @@ public class Productos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenu jMenu1;
+    public static javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;

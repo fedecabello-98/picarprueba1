@@ -269,7 +269,7 @@ public class PagosClientes extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Pagos registrados");
+        jMenu2.setText("Pagos de clientes registrados");
 
         jMenuItem2.setText("Mostrar todos");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -425,18 +425,18 @@ public class PagosClientes extends javax.swing.JFrame {
                 jLabel5.setText(completo);
                 jComboBox1.setEnabled(true);
                 jButton5.setEnabled(true);
-                    ResultSet saldo = st.executeQuery("SELECT (t2.ventas - t1.cobros) AS saldo FROM (SELECT SUM( DISTINCT importepago) AS cobros FROM pagosclientes) AS t1 CROSS JOIN (SELECT SUM( cantidad * precio_remito ) AS ventas FROM remitos where remitos.cliente_id="+idcliente+") AS t2;");
+                    ResultSet saldo = st.executeQuery("SELECT (t2.ventas - t1.cobros) AS saldo FROM (SELECT SUM(importepago) AS cobros FROM pagosclientes where pagosclientes.cliente_id="+idcliente+") AS t1 CROSS JOIN (SELECT SUM( cantidad * precio_remito ) AS ventas FROM remitos where remitos.cliente_id="+idcliente+") AS t2;");
                     if(saldo.next()){
                     float traersaldo = saldo.getFloat("saldo");
                 jLabel3.setText("SALDO: $ "+traersaldo);
                 }
                 jComboBox1.setSelectedIndex(0);
-                jComboBox1.requestFocus();
                     jLabel8.setVisible(true);
                     jTextField2.setVisible(true);
                     jLabel7.setVisible(false);
                     jLabel9.setVisible(false);
                     jComboBox2.setVisible(false);
+                    jTextField2.requestFocus();
                 }else{
                     jLabel5.setForeground(Color.red);
                     jLabel5.setText("CLIENTE NO ENCONTRADO");
@@ -451,7 +451,7 @@ public class PagosClientes extends javax.swing.JFrame {
                     jTextField1.requestFocus();
                 }
             } catch (SQLException e) {
-            System.out.println(e);
+            //System.out.println(e);
             //JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
             }
             return idcliente;
@@ -483,6 +483,7 @@ public class PagosClientes extends javax.swing.JFrame {
             jLabel7.setVisible(false);
             jLabel9.setVisible(false);
             jComboBox2.setVisible(false);
+            jTextField2.setText("");
             break;
         case 1:
             jLabel8.setVisible(false);
@@ -490,6 +491,8 @@ public class PagosClientes extends javax.swing.JFrame {
             jLabel7.setVisible(true);
             jLabel9.setVisible(false);
             jComboBox2.setVisible(false);
+
+            jTextField2.setText("");
             break;
         case 2:
             jLabel8.setVisible(true);
@@ -537,6 +540,7 @@ public class PagosClientes extends javax.swing.JFrame {
             jLabel7.setVisible(false);
             jLabel9.setVisible(false);
             jComboBox2.setVisible(false);
+            jTextField2.setText("");
             break;
         }
         jTextField2.requestFocus();
@@ -556,9 +560,8 @@ public class PagosClientes extends javax.swing.JFrame {
                         total += Float.parseFloat(jTable1.getValueAt(i,3).toString());
                     }
                     jLabel6.setText("TOTAL DEL PAGO: $"+total);
-                    jTextField2.setText("");
                     jButton3.setEnabled(true);
-                    jComboBox1.requestFocus();
+                    jTextField2.requestFocus();
         return tipopago;
     }
     }
@@ -650,7 +653,7 @@ public class PagosClientes extends javax.swing.JFrame {
                 if(registro.next()){
                 String traernombre = registro.getString("nombre");
                 String traerapellido = registro.getString("apellido");
-                    ResultSet saldo = st.executeQuery("SELECT (t2.ventas - t1.cobros) AS saldo FROM (SELECT SUM( DISTINCT importepago) AS cobros FROM pagosclientes) AS t1 CROSS JOIN (SELECT SUM( cantidad * precio_remito ) AS ventas FROM remitos where remitos.cliente_id="+idcliente+") AS t2;");
+                    ResultSet saldo = st.executeQuery("SELECT (t2.ventas - t1.cobros) AS saldo FROM (SELECT SUM(importepago) AS cobros FROM pagosclientes WHERE pagosclientes.cliente_id="+idcliente+") AS t1 CROSS JOIN (SELECT SUM( cantidad * precio_remito ) AS ventas FROM remitos where remitos.cliente_id="+idcliente+") AS t2;");
                     if(saldo.next()){
                     float traersaldo = saldo.getFloat("saldo");
             JOptionPane.showMessageDialog(null,"PAGO N°"+npago+" registrado con éxito. Cliente: "+idcliente+" - "+traernombre+" "+traerapellido+". SALDO: $"+traersaldo,"PAGO REGISTRADO",JOptionPane.INFORMATION_MESSAGE);
@@ -706,10 +709,10 @@ public class PagosClientes extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
-        PagosClientesMostrarTodos pagoscliall = new PagosClientesMostrarTodos(this,true);
+        PagosClientesMostrarTodos allclientes = new PagosClientesMostrarTodos(this,true);
         //chequesall.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        pagoscliall.setLocationRelativeTo(null);
-        pagoscliall.setVisible(true);
+        allclientes.setLocationRelativeTo(null);
+        allclientes.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**

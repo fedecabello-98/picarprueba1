@@ -120,7 +120,7 @@ public class AltaRangos extends javax.swing.JDialog {
 
         jLabel1.setBackground(new java.awt.Color(204, 255, 51));
         jLabel1.setFont(new java.awt.Font("Calibri", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 102, 0));
+        jLabel1.setForeground(new java.awt.Color(0, 153, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("GESTIÓN DE RANGOS");
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -206,8 +206,9 @@ public class AltaRangos extends javax.swing.JDialog {
         jLabel7.setFont(new java.awt.Font("Calibri", 0, 22)); // NOI18N
         jLabel7.setText("Rango:");
 
-        jButton3.setBackground(new java.awt.Color(255, 102, 0));
+        jButton3.setBackground(new java.awt.Color(0, 153, 255));
         jButton3.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Modificar rango");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

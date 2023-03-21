@@ -1,16 +1,60 @@
 
 package app;
 
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author fedec
  */
-public class PagosProveedores extends javax.swing.JDialog {
-
+public class PagosProveedores extends javax.swing.JFrame {
+    DefaultTableModel modelo;
     /** Creates new form PagosProveedores */
-    public PagosProveedores(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public PagosProveedores() {
         initComponents();
+        LlenarCombo.conectar();
+        try{
+        Statement st = LlenarCombo.conexion.createStatement();
+        ResultSet pagoinicial = st.executeQuery("select (pagosproveedores.idpagosproveedores+1) from picar_db.pagosproveedores order by pagosproveedores.idpagosproveedores desc limit 1;");
+            if(pagoinicial.next()){
+                String formateopago = pagoinicial.getString("(pagosproveedores.idpagosproveedores+1)");
+                jLabel1.setText(formateopago);
+            }
+        } catch (SQLException e) {
+                System.out.println(e);
+                JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        modelo = new DefaultTableModel();
+        modelo.addColumn("Tipo de pago");
+        modelo.addColumn("N° de cheque");
+        modelo.addColumn("Importe");
+        this.jTable1.setModel(modelo);
+        jComboBox2.removeAllItems();
+        ArrayList<String> traercheques = new ArrayList<String>();
+        traercheques = LlenarCombo.llenar_combo11();
+        for(int i = 0; i<traercheques.size();i++){
+        jComboBox2.addItem(traercheques.get(i));
+        }
+        jComboBox3.removeAllItems();
+        ArrayList<String> traerproveedor = new ArrayList<String>();
+        traerproveedor = LlenarCombo.llenar_combo8();
+        for(int i = 0; i<traerproveedor.size();i++){
+        jComboBox3.addItem(traerproveedor.get(i));
+        }    
+        jLabel9.setVisible(false);
+        jComboBox2.setVisible(false);
+        jTextField2.setText("");
+        jTextField2.requestFocus();
     }
 
     /** This method is called from within the constructor to
@@ -21,21 +65,543 @@ public class PagosProveedores extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     private void initComponents() {//GEN-BEGIN:initComponents
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel4 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jButton5 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jComboBox3 = new javax.swing.JComboBox<>();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Compras | Pagos a proveedores");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
+
+        jLabel2.setBackground(new java.awt.Color(204, 255, 51));
+        jLabel2.setFont(new java.awt.Font("Calibri", 1, 36)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 114, 0));
+        jLabel2.setText("PAGO N°");
+        jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        jLabel1.setBackground(new java.awt.Color(204, 255, 51));
+        jLabel1.setFont(new java.awt.Font("Calibri", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 114, 0));
+        jLabel1.setText("-");
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        jButton3.setBackground(new java.awt.Color(255, 114, 0));
+        jButton3.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(255, 255, 255));
+        jButton3.setText("Registrar pago");
+        jButton3.setEnabled(false);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setBackground(new java.awt.Color(255, 255, 255));
+        jButton2.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jButton2.setText("Limpiar campos");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton1.setBackground(new java.awt.Color(255, 0, 0));
+        jButton1.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Volver");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Calibri", 0, 22)); // NOI18N
+        jLabel4.setText("Proveedor:");
+
+        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "EFECTIVO", "CHEQUE", "CHEQUE RECHAZADO", "TRANSFERENCIA" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setBackground(java.awt.Color.green);
+        jButton5.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jButton5.setForeground(new java.awt.Color(255, 255, 255));
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/dolar.png"))); // NOI18N
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Arial", 3, 18)); // NOI18N
+        jLabel3.setForeground(java.awt.Color.red);
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("-");
+        jLabel3.setFocusable(false);
+        jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        jTextField2.setFont(new java.awt.Font("Calibri", 1, 22)); // NOI18N
+        jTextField2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField2FocusLost(evt);
+            }
+        });
+        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2ActionPerformed(evt);
+            }
+        });
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField2KeyTyped(evt);
+            }
+        });
+
+        jLabel9.setFont(new java.awt.Font("Calibri", 0, 22)); // NOI18N
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setText("N° de cheque:");
+
+        jComboBox2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox2ActionPerformed(evt);
+            }
+        });
+
+        jTable1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jTable1.setEnabled(false);
+        jScrollPane1.setViewportView(jTable1);
+
+        jLabel6.setFont(new java.awt.Font("Calibri", 3, 18)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel6.setText("TOTAL DEL PAGO: $");
+
+        jLabel7.setFont(new java.awt.Font("Calibri", 0, 22)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("Importe:");
+
+        jComboBox3.setBackground(new java.awt.Color(255, 114, 0));
+        jComboBox3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox3ActionPerformed(evt);
+            }
+        });
+
+        jMenu1.setText("Cheques");
+
+        jMenuItem1.setText("Registrar cheque");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem3.setText("Mostrar todos");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem3);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Pagos a proveedores registrados");
+
+        jMenuItem2.setText("Mostrar todos");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 783, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(2, 2, 2)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(10, 10, 10)
+                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(12, 12, 12)
+                                    .addComponent(jLabel9)
+                                    .addGap(12, 12, 12)
+                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(8, 8, 8)
+                                    .addComponent(jButton5)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 781, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 780, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton1)
+                        .addComponent(jButton2)
+                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(6, 6, 6)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton5)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6))
         );
 
         pack();
     }//GEN-END:initComponents
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        Cheques cheque = new Cheques(this,true);
+        //cheque.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        cheque.setLocationRelativeTo(null);
+        cheque.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        ChequesMostrarTodos chequesall = new ChequesMostrarTodos(this,true);
+        //chequesall.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        chequesall.setLocationRelativeTo(null);
+        chequesall.setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        PagosProveedoresMostrarTodos proveedoresall = new PagosProveedoresMostrarTodos(this,true);
+        //chequesall.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        proveedoresall.setLocationRelativeTo(null);
+        proveedoresall.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    public class GenerarPagoProv{
+        public GenerarPagoProv(){
+        }
+        public String generarPagoProv(String npago, int idproveedor){
+            try{
+                Statement st = LlenarCombo.conexion.createStatement();
+                for(int i = 0;i< jTable1.getRowCount();i++){
+                st.executeUpdate("INSERT INTO picar_db.pagosproveedores VALUES ("+npago+","+idproveedor+",'"+jTable1.getValueAt(i,0)+"',"+jTable1.getValueAt(i,1)+","+jTable1.getValueAt(i,2)+",current_date());");
+                }
+                
+                ResultSet registro = st.executeQuery("SELECT * FROM picar_db.proveedores WHERE proveedores.idproveedores="+idproveedor+";");
+                if(registro.next()){
+                String traernombre = registro.getString("proveedor");
+                    ResultSet saldo = st.executeQuery("SELECT (t2.ventas - t1.cobros) AS saldo FROM (SELECT SUM(importepagoprov) AS cobros FROM picar_db.pagosproveedores WHERE pagosproveedores.proveedor_id="+idproveedor+") AS t1 CROSS JOIN (SELECT SUM( cantidad_compra * precio_compra ) AS ventas FROM picar_db.compras where compras.proveedor_id="+idproveedor+") AS t2;");
+                    if(saldo.next()){
+                    float traersaldo = saldo.getFloat("saldo");
+            JOptionPane.showMessageDialog(null,"PAGO N°"+npago+" registrado con éxito a proveedor "+idproveedor+" - "+traernombre+". DEUDA: $"+traersaldo,"PAGO REGISTRADO",JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+                Compras compras = new Compras();
+                dispose();
+                compras.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+                compras.setLocationRelativeTo(null);
+                compras.setVisible(true);
+            } catch (SQLException e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+            return npago;
+        }
+    }
+    private transient GenerarPagoProv generarpagoprov = new GenerarPagoProv();
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        String npago = this.jLabel1.getText();
+        int idproveedor = this.jComboBox3.getSelectedIndex()+1;
+        generarpagoprov.generarPagoProv(npago,idproveedor);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        jLabel9.setVisible(false);
+        jComboBox2.setVisible(false);
+        jComboBox1.setSelectedIndex(0);
+        jTextField2.setText("");
+        jTextField2.requestFocus();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        Compras compras = new Compras();
+        this.dispose();
+        compras.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        compras.setLocationRelativeTo(null);
+        compras.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+        int item = jComboBox1.getSelectedIndex();
+        switch(item){
+            case 0:
+            jLabel9.setVisible(false);
+            jComboBox2.setVisible(false);
+            jTextField2.setText("");
+            jTextField2.requestFocus();
+            break;
+            case 1:
+            jLabel9.setVisible(true);
+            jComboBox2.setVisible(true);
+            String chequecombo = (String) jComboBox2.getSelectedItem();
+            try{
+                Statement st = LlenarCombo.conexion.createStatement();
+                ResultSet registro = st.executeQuery("SELECT cheques.importecheque FROM picar_db.cheques WHERE cheques.idcheques="+chequecombo+";");
+                if(registro.next()){
+                    String traerncheque = registro.getString("importecheque");
+                    jTextField2.setText(traerncheque);
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+                JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+            jButton5.requestFocus();
+            break;
+            case 2:
+            jLabel9.setVisible(true);
+            jComboBox2.setVisible(true);
+            String chequecombodos = (String) jComboBox2.getSelectedItem();
+            try{
+                Statement st = LlenarCombo.conexion.createStatement();
+                ResultSet registro = st.executeQuery("SELECT cheques.importecheque FROM picar_db.cheques WHERE cheques.idcheques="+chequecombodos+";");
+                if(registro.next()){
+                    String traerncheque = registro.getString("importecheque");
+                    jTextField2.setText(traerncheque);
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+                JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+            jButton5.requestFocus();
+            break;
+            case 3:
+            jLabel9.setVisible(false);
+            jComboBox2.setVisible(false);
+            jTextField2.setText("");
+            jTextField2.requestFocus();
+            break;
+        }
+        jTextField2.requestFocus();
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+    public class LlenarTabla{
+        public LlenarTabla(){
+        }
+        public String llenarTabla(String tipopago, String importe, String ncheque){
+                float total = 0;
+                Object info[]=new Object[3];
+                info[0]=tipopago;
+                info[1]=ncheque;
+                info[2]=importe;
+                modelo.addRow(info);
+                    for(int i = 0;i< jTable1.getRowCount();i++){
+                        total += Float.parseFloat(jTable1.getValueAt(i,2).toString());
+                    }
+                    jLabel6.setText("TOTAL DEL PAGO: $"+total);
+                    jButton3.setEnabled(true);
+                    jTextField2.requestFocus();
+        return tipopago;
+    }
+    }
+    private transient LlenarTabla lltabla = new LlenarTabla();
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        int index = this.jComboBox1.getSelectedIndex();
+        if(index==0||index==3){
+            String tipopago = (String) this.jComboBox1.getSelectedItem();
+            String importe = this.jTextField2.getText();
+            String ncheque = "null";
+            lltabla.llenarTabla(tipopago,importe,ncheque);
+        }
+        if(index==1){
+            String tipopago = (String) this.jComboBox1.getSelectedItem();
+            String importe = this.jTextField2.getText();
+            String ncheque = (String) this.jComboBox2.getSelectedItem();
+            lltabla.llenarTabla(tipopago,importe,ncheque);
+        }
+        if(index==2){
+            String tipopago = (String) this.jComboBox1.getSelectedItem();
+            String importe = "-"+this.jTextField2.getText();
+            String ncheque = (String) this.jComboBox2.getSelectedItem();
+            lltabla.llenarTabla(tipopago,importe,ncheque);
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jTextField2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2FocusLost
+
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        // TODO add your handling code here:
+        jButton5.requestFocus();
+    }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void jTextField2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyTyped
+        // TODO add your handling code here:
+        char karakter = evt.getKeyChar();
+        if(!(((karakter >= '0') && (karakter <= '9') || (karakter == '.') || (karakter == KeyEvent.VK_DELETE)))){
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField2KeyTyped
+
+    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+        // TODO add your handling code here:
+        String chequecombo = (String) jComboBox2.getSelectedItem();
+        try{
+            Statement st = LlenarCombo.conexion.createStatement();
+            ResultSet registro = st.executeQuery("SELECT cheques.importecheque FROM picar_db.cheques WHERE cheques.idcheques="+chequecombo+";");
+            if(registro.next()){
+                String traerncheque = registro.getString("importecheque");
+                jTextField2.setText(traerncheque);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        jButton5.requestFocus();
+    }//GEN-LAST:event_jComboBox2ActionPerformed
+    public class BuscarSaldo{
+        public BuscarSaldo(){
+        }
+        public String buscarSaldo(int idproveedor){
+            try{
+                Statement st = LlenarCombo.conexion.createStatement();
+                ResultSet saldo = st.executeQuery("SELECT (t2.ventas - t1.cobros) AS saldo FROM (SELECT SUM(importepagoprov) AS cobros FROM picar_db.pagosproveedores WHERE pagosproveedores.proveedor_id="+idproveedor+") AS t1 CROSS JOIN (SELECT SUM( cantidad_compra * precio_compra ) AS ventas FROM picar_db.compras where compras.proveedor_id="+idproveedor+") AS t2;");
+                if(saldo.next()){
+                float traersaldo = saldo.getFloat("saldo");
+                jLabel3.setText("DEUDA: $ "+traersaldo);
+                jTextField2.requestFocus();
+                }else{
+                jLabel3.setText("-");
+                jComboBox3.requestFocus();
+                }
+            } catch (SQLException e) {
+            System.out.println(e);
+            //JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+            return null;
+        }
+    }
+    private transient BuscarSaldo bsaldo = new BuscarSaldo();
+    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
+        // TODO add your handling code here:
+        int idproveedor = this.jComboBox3.getSelectedIndex()+1;
+        bsaldo.buscarSaldo(idproveedor);
+    }//GEN-LAST:event_jComboBox3ActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // TODO add your handling code here:
+        if(jComboBox2.isVisible()){
+            jComboBox2.removeAllItems();
+            ArrayList<String> traercheques = new ArrayList<String>();
+            traercheques = LlenarCombo.llenar_combo11();
+            for(int i = 0; i<traercheques.size();i++){
+            jComboBox2.addItem(traercheques.get(i));
+            }    
+        }
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments
@@ -96,24 +662,41 @@ public class PagosProveedores extends javax.swing.JDialog {
         }
         //</editor-fold>
 
-        /* Create and display the dialog */
+        /* Create and display the form */
         java.awt
             .EventQueue
             .invokeLater(new Runnable() {
                 public void run() {
-                    PagosProveedores dialog = new PagosProveedores(new javax.swing.JFrame(), true);
-                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                        @Override
-                        public void windowClosing(java.awt.event.WindowEvent e) {
-                            System.exit(0);
-                        }
-                    });
-                    dialog.setVisible(true);
+                    new PagosProveedores().setVisible(true);
                 }
             });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 
 }
