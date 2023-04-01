@@ -2,6 +2,29 @@
 package app;
 
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.awt.Desktop;
+
+import java.io.File;
+import java.io.FileOutputStream;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import java.sql.Statement;
+
 import java.text.SimpleDateFormat;
 
 import java.time.format.TextStyle;
@@ -10,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,6 +45,7 @@ public class Informes extends javax.swing.JFrame {
     /** Creates new form Informes */
     public Informes() {
         initComponents();
+        LlenarCombo.conectar();
         jButton2.requestFocus();
         /*
         LlenarCombo.conectar();
@@ -45,9 +71,6 @@ public class Informes extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jCalendar1 = new com.toedter.calendar.JCalendar();
         jCalendar2 = new com.toedter.calendar.JCalendar();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Informes");
@@ -90,15 +113,6 @@ public class Informes extends javax.swing.JFrame {
         jCalendar1.setWeekOfYearVisible(false);
 
         jCalendar2.setWeekOfYearVisible(false);
-
-        jMenu1.setText("Informe anual");
-
-        jMenuItem1.setText("Generar informe por año");
-        jMenu1.add(jMenuItem1);
-
-        jMenuBar1.add(jMenu1);
-
-        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -160,15 +174,648 @@ public class Informes extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        /*
         InformeGenerado informenuevo = new InformeGenerado();
         this.dispose();
-        /*informenuevo.setLocationRelativeTo(null);
-        informenuevo.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        informenuevo.setVisible(true);*/
+        VentanaPrincipal inicio = new VentanaPrincipal();
+        inicio.setLocationRelativeTo(null);
+        inicio.setVisible(true);
+        */
+        int diainicia = this.jCalendar1.getCalendar().get(Calendar.DAY_OF_MONTH);
+        int mesinicia =  this.jCalendar1.getCalendar().get(Calendar.MARCH)+1;
+        int anioinicia = this.jCalendar1.getCalendar().get(Calendar.YEAR);
+
+        int diatermina = this.jCalendar2.getCalendar().get(Calendar.DAY_OF_MONTH);
+        int mestermina =  this.jCalendar2.getCalendar().get(Calendar.MARCH)+1;
+        int aniotermina = this.jCalendar2.getCalendar().get(Calendar.YEAR);
+        
+        Date fecha = new Date(Calendar.getInstance().getTimeInMillis());
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String fechahoy = formatter.format(fecha);
+        
+        String mesString;
+        switch (mesinicia) {
+                case 1:  mesString = "ENE";
+                         break;
+                case 2:  mesString  = "FEB";
+                         break;
+                case 3:  mesString = "MAR";
+                         break;
+                case 4:  mesString = "ABR";
+                         break;
+                case 5:  mesString = "MAY";
+                         break;
+                case 6:  mesString = "JUN";
+                         break;
+                case 7:  mesString = "JUL";
+                         break;
+                case 8:  mesString = "AGO";
+                         break;
+                case 9:  mesString = "SEP";
+                         break;
+                case 10: mesString = "OCT";
+                         break;
+                case 11: mesString = "NOV";
+                         break;
+                case 12: mesString = "DIC";
+                         break;
+                default: mesString = "NULL";
+                         break;
+                }
+
+        String mesterminaString;
+        switch (mestermina) {
+                case 1:  mesterminaString = "ENE";
+                         break;
+                case 2:  mesterminaString  = "FEB";
+                         break;
+                case 3:  mesterminaString = "MAR";
+                         break;
+                case 4:  mesterminaString = "ABR";
+                         break;
+                case 5:  mesterminaString = "MAY";
+                         break;
+                case 6:  mesterminaString = "JUN";
+                         break;
+                case 7:  mesterminaString = "JUL";
+                         break;
+                case 8:  mesterminaString = "AGO";
+                         break;
+                case 9:  mesterminaString = "SEP";
+                         break;
+                case 10: mesterminaString = "OCT";
+                         break;
+                case 11: mesterminaString = "NOV";
+                         break;
+                case 12: mesterminaString = "DIC";
+                         break;
+                default: mesterminaString = "NULL";
+                         break;
+                }
+        
+        try{
+            Document documento = new Document();
+            String ruta = System.getProperty("user.home");
+            String directorio = "/Desktop/INFORME "+fechahoy.replace("/","-")+".pdf";
+            PdfWriter.getInstance(documento, new FileOutputStream(ruta+directorio));
+            documento.open();
+            BaseFont baseFont = BaseFont.createFont("C:/Windows/Fonts/Calibri.ttf", BaseFont.WINANSI, BaseFont.EMBEDDED);
+            Font fonttitulo = new Font(baseFont, 12, Font.UNDERLINE);
+            Font font = new Font(baseFont, 10, Font.BOLD);
+            Font fontroja = new Font (baseFont,11, Font.BOLD, BaseColor.RED);
+            Image header = Image.getInstance("src/imagenes/picarlogo.png");
+            header.scaleToFit(250,1000);
+            header.setAlignment(Chunk.ALIGN_CENTER);
+            documento.add(header);
+            Paragraph titulo = new Paragraph ("Informes desde "+diainicia+"-"+mesString+"-"+anioinicia+" hasta "+diatermina+"-"+mesterminaString+"-"+aniotermina+".\n",fonttitulo);
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            documento.add(titulo);
+            String fechas = "BETWEEN '"+anioinicia+"-"+mesinicia+"-"+diainicia+"' AND '"+aniotermina+"-"+mestermina+"-"+diatermina+"'";
+            Statement st = LlenarCombo.conexion.createStatement();
+            documento.add(new Paragraph ("\n",font));
+            Paragraph remitos_titulo = new Paragraph ("REMITOS",fonttitulo);
+            remitos_titulo.setAlignment(Element.ALIGN_CENTER);
+            documento.add(remitos_titulo);
+            ResultSet countremitos = st.executeQuery("select count(distinct idremitos) as cantremitos from picar_db.remitos where idremitos!=0 AND fecharemito "+fechas+";");
+            if(countremitos.next()){
+                documento.add(new Paragraph ("\nCantidad de remitos generados: "+countremitos.getString("cantremitos")+".\n",font));
+            }
+            ResultSet totalremitos = st.executeQuery("select sum(precio_remito*cantidad) as total from picar_db.remitos where idremitos!=0 AND fecharemito "+fechas+";");
+            if(totalremitos.next()){
+                documento.add(new Paragraph ("Total de remitos generados: $"+totalremitos.getFloat("total")+".\n\n",fontroja));
+            }
+            Font fuentecabeza = new Font(Font.FontFamily.UNDEFINED,10,Font.BOLDITALIC);
+            Font fuentetabla = new Font(Font.FontFamily.UNDEFINED, 11, Font.BOLD);
+            Font fuentetablared = new Font(Font.FontFamily.UNDEFINED, 11, Font.BOLD, BaseColor.RED);
+            ResultSet tabla1 = st.executeQuery("select date_format(remitos.fecharemito, '%d/%m/%Y'), remitos.idremitos, sum(precio_remito*cantidad), clientes.apellido, clientes.nombre, vendedores.vendedor from picar_db.remitos join picar_db.clientes on remitos.cliente_id=clientes.idcliente join picar_db.vendedores on remitos.vendedor_id=vendedores.idvendedores where remitos.idremitos!=0 and remitos.fecharemito "+fechas+" group by remitos.idremitos order by remitos.fecharemito asc;");
+            if(tabla1.next()){
+                PdfPTable tabla = new PdfPTable(5);
+                tabla.setWidthPercentage(100);
+                float[] columnWidths = {12,15,15,35,23};
+                tabla.setWidths(columnWidths);
+                PdfPCell cabeza1 = new PdfPCell(new Phrase("FECHA", fuentecabeza));
+                cabeza1.setBackgroundColor(BaseColor.YELLOW);
+                cabeza1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza1.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza2 = new PdfPCell(new Phrase("ID REMITO", fuentecabeza));
+                cabeza2.setBackgroundColor(BaseColor.YELLOW);
+                cabeza2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza2.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza3 = new PdfPCell(new Phrase("TOTAL", fuentecabeza));
+                cabeza3.setBackgroundColor(BaseColor.YELLOW);
+                cabeza3.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza3.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza4 = new PdfPCell(new Phrase("CLIENTE", fuentecabeza));
+                cabeza4.setBackgroundColor(BaseColor.YELLOW);
+                cabeza4.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza4.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza5 = new PdfPCell(new Phrase("VENDEDOR", fuentecabeza));
+                cabeza5.setBackgroundColor(BaseColor.YELLOW);
+                cabeza5.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza5.setVerticalAlignment(Element.ALIGN_CENTER);
+                tabla.addCell(cabeza1);
+                tabla.addCell(cabeza2);
+                tabla.addCell(cabeza3);
+                tabla.addCell(cabeza4);
+                tabla.addCell(cabeza5);
+                do{
+                        PdfPCell celdauno = new PdfPCell(new Phrase(tabla1.getString(1), fuentetabla));
+                        celdauno.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdauno.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdados = new PdfPCell(new Phrase(tabla1.getString(2), fuentetabla));
+                        celdados.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdados.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdatres = new PdfPCell(new Phrase(Float.toString(tabla1.getFloat(3)), fuentetabla));
+                        celdatres.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdatres.setVerticalAlignment(Element.ALIGN_CENTER);
+                    String nombrecompleto = tabla1.getString(4)+" "+tabla1.getString(5);
+                        PdfPCell celdacuatro = new PdfPCell(new Phrase(nombrecompleto, fuentetabla));
+                        celdacuatro.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdacuatro.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdacinco = new PdfPCell(new Phrase(tabla1.getString(6), fuentetabla));
+                        celdacinco.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdacinco.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tabla.addCell(celdauno);
+                    tabla.addCell(celdados);
+                    tabla.addCell(celdatres);
+                    tabla.addCell(celdacuatro);
+                    tabla.addCell(celdacinco);
+                    } while (tabla1.next());
+                        documento.add(tabla);
+            }
+            documento.add(new Paragraph ("\nTotal de compras por cliente:\n\n",font));
+            ResultSet tabla2 = st.executeQuery("select remitos.fecharemito, clientes.apellido, clientes.nombre , sum(precio_remito*cantidad) as totalcomprado from picar_db.remitos join picar_db.clientes on clientes.idcliente=remitos.cliente_id where idremitos!=0 and remitos.fecharemito "+fechas+" group by remitos.cliente_id order by totalcomprado desc;");
+            if(tabla2.next()){
+                PdfPTable tabla = new PdfPTable(2);
+                tabla.setWidthPercentage(100);
+                float[] columnWidths = {70,30};
+                tabla.setWidths(columnWidths);
+                PdfPCell cabeza1 = new PdfPCell(new Phrase("CLIENTE", fuentecabeza));
+                cabeza1.setBackgroundColor(BaseColor.YELLOW);
+                cabeza1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza1.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza2 = new PdfPCell(new Phrase("TOTAL COMPRADO", fuentecabeza));
+                cabeza2.setBackgroundColor(BaseColor.YELLOW);
+                cabeza2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza2.setVerticalAlignment(Element.ALIGN_CENTER);
+                tabla.addCell(cabeza1);
+                tabla.addCell(cabeza2);
+                do{
+                    String nombrecompleto = tabla2.getString(2)+" "+tabla2.getString(3);
+                        PdfPCell celdauno = new PdfPCell(new Phrase(nombrecompleto, fuentetabla));
+                        celdauno.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdauno.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdados = new PdfPCell(new Phrase(Float.toString(tabla2.getFloat(4)), fuentetabla));
+                        celdados.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdados.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tabla.addCell(celdauno);
+                    tabla.addCell(celdados);
+                    } while (tabla2.next());
+                        documento.add(tabla);
+            }
+            documento.add(new Paragraph ("\nTotal de ventas por vendedor:\n\n",font));
+            ResultSet tabla3 = st.executeQuery("select remitos.fecharemito, vendedores.vendedor, sum(precio_remito*cantidad) as total from picar_db.remitos join picar_db.vendedores on vendedores.idvendedores=remitos.vendedor_id where remitos.idremitos!=0 and remitos.fecharemito "+fechas+" group by vendedor_id order by total desc;");
+            if(tabla3.next()){
+                PdfPTable tabla = new PdfPTable(2);
+                tabla.setWidthPercentage(100);
+                float[] columnWidths = {70,30};
+                tabla.setWidths(columnWidths);
+                PdfPCell cabeza1 = new PdfPCell(new Phrase("VENDEDOR", fuentecabeza));
+                cabeza1.setBackgroundColor(BaseColor.YELLOW);
+                cabeza1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza1.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza2 = new PdfPCell(new Phrase("TOTAL VENDIDO", fuentecabeza));
+                cabeza2.setBackgroundColor(BaseColor.YELLOW);
+                cabeza2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza2.setVerticalAlignment(Element.ALIGN_CENTER);
+                tabla.addCell(cabeza1);
+                tabla.addCell(cabeza2);
+                do{
+                        PdfPCell celdauno = new PdfPCell(new Phrase(tabla3.getString(2), fuentetabla));
+                        celdauno.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdauno.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdados = new PdfPCell(new Phrase(Float.toString(tabla3.getFloat(3)), fuentetabla));
+                        celdados.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdados.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tabla.addCell(celdauno);
+                    tabla.addCell(celdados);
+                    } while (tabla3.next());
+                        documento.add(tabla);
+            }
+            documento.add(new Paragraph ("\n",font));
+            Paragraph pedidos_titulo = new Paragraph ("COMPRAS (PEDIDOS)",fonttitulo);
+            pedidos_titulo.setAlignment(Element.ALIGN_CENTER);
+            documento.add(pedidos_titulo);
+            ResultSet countpedidos = st.executeQuery("select count(distinct idcompras) as cantcompras from picar_db.compras where idcompras!=0 AND fechacompra "+fechas+";");
+            if(countpedidos.next()){
+                documento.add(new Paragraph ("\nCantidad de pedidos realizados: "+countpedidos.getString("cantcompras")+".\n",font));
+            }
+            ResultSet totalpedidos = st.executeQuery("select sum(precio_compra*cantidad_compra) as total from picar_db.compras where idcompras!=0 AND fechacompra "+fechas+";");
+            if(totalpedidos.next()){
+                documento.add(new Paragraph ("Total de pedidos realizados: $"+totalpedidos.getFloat("total")+".\n\n",fontroja));
+            }
+            ResultSet tabla4 = st.executeQuery("select date_format(compras.fechacompra, '%d/%m/%Y') as fecha,compras.idcompras, sum(cantidad_compra*precio_compra), proveedores.proveedor from picar_db.compras join picar_db.proveedores on proveedores.idproveedores=compras.proveedor_id where compras.idcompras!=0 and compras.fechacompra "+fechas+" group by compras.idcompras order by fecha desc;");
+            if(tabla4.next()){
+                PdfPTable tabla = new PdfPTable(4);
+                tabla.setWidthPercentage(100);
+                float[] columnWidths = {12,15,15,48};
+                tabla.setWidths(columnWidths);
+                PdfPCell cabeza1 = new PdfPCell(new Phrase("FECHA", fuentecabeza));
+                cabeza1.setBackgroundColor(BaseColor.ORANGE);
+                cabeza1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza1.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza2 = new PdfPCell(new Phrase("ID COMPRA", fuentecabeza));
+                cabeza2.setBackgroundColor(BaseColor.ORANGE);
+                cabeza2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza2.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza3 = new PdfPCell(new Phrase("TOTAL", fuentecabeza));
+                cabeza3.setBackgroundColor(BaseColor.ORANGE);
+                cabeza3.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza3.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza4 = new PdfPCell(new Phrase("PROVEEDOR", fuentecabeza));
+                cabeza4.setBackgroundColor(BaseColor.ORANGE);
+                cabeza4.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza4.setVerticalAlignment(Element.ALIGN_CENTER);
+                tabla.addCell(cabeza1);
+                tabla.addCell(cabeza2);
+                tabla.addCell(cabeza3);
+                tabla.addCell(cabeza4);
+                do{
+                        PdfPCell celdauno = new PdfPCell(new Phrase(tabla4.getString(1), fuentetabla));
+                        celdauno.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdauno.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdados = new PdfPCell(new Phrase(tabla4.getString(2), fuentetabla));
+                        celdados.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdados.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdatres = new PdfPCell(new Phrase(Float.toString(tabla4.getFloat(3)), fuentetabla));
+                        celdatres.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdatres.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdacuatro = new PdfPCell(new Phrase(tabla4.getString(4), fuentetabla));
+                        celdacuatro.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdacuatro.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tabla.addCell(celdauno);
+                    tabla.addCell(celdados);
+                    tabla.addCell(celdatres);
+                    tabla.addCell(celdacuatro);
+                    } while (tabla4.next());
+                        documento.add(tabla);
+            }
+            documento.add(new Paragraph ("\nTotal de pedidos por proveedor:\n\n",font));
+            ResultSet tabla5 = st.executeQuery("select compras.fechacompra, proveedores.proveedor, sum(cantidad_compra*precio_compra) as totalcomprado from compras join proveedores on proveedores.idproveedores=compras.proveedor_id where idcompras!=0 and compras.fechacompra "+fechas+" group by compras.proveedor_id order by totalcomprado desc;");
+            if(tabla5.next()){
+                PdfPTable tabla = new PdfPTable(2);
+                tabla.setWidthPercentage(100);
+                float[] columnWidths = {70,30};
+                tabla.setWidths(columnWidths);
+                PdfPCell cabeza1 = new PdfPCell(new Phrase("PROVEEDOR", fuentecabeza));
+                cabeza1.setBackgroundColor(BaseColor.ORANGE);
+                cabeza1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza1.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza2 = new PdfPCell(new Phrase("TOTAL PEDIDO", fuentecabeza));
+                cabeza2.setBackgroundColor(BaseColor.ORANGE);
+                cabeza2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza2.setVerticalAlignment(Element.ALIGN_CENTER);
+                tabla.addCell(cabeza1);
+                tabla.addCell(cabeza2);
+                do{
+                        PdfPCell celdauno = new PdfPCell(new Phrase(tabla5.getString(2), fuentetabla));
+                        celdauno.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdauno.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdados = new PdfPCell(new Phrase(Float.toString(tabla5.getFloat(3)), fuentetabla));
+                        celdados.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdados.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tabla.addCell(celdauno);
+                    tabla.addCell(celdados);
+                    } while (tabla5.next());
+                        documento.add(tabla);
+            }
+            documento.add(new Paragraph ("\n",font));
+            Paragraph pagoscli_titulo = new Paragraph ("PAGOS DE CLIENTES",fonttitulo);
+            pagoscli_titulo.setAlignment(Element.ALIGN_CENTER);
+            documento.add(pagoscli_titulo);
+            ResultSet countpagoscli = st.executeQuery("select count(distinct idpagosclientes) as cantpagoscli from picar_db.pagosclientes where idpagosclientes!=0 AND fechapagocliente "+fechas+";");
+            if(countpagoscli.next()){
+                documento.add(new Paragraph ("\nCantidad de pagos recibidos: "+countpagoscli.getString("cantpagoscli")+".\n",font));
+            }
+            ResultSet totalpagoscli = st.executeQuery("select sum(importepago) as total from picar_db.pagosclientes where idpagosclientes!=0 AND fechapagocliente "+fechas+";");
+            if(totalpagoscli.next()){
+                documento.add(new Paragraph ("Total de pagos recibidos: $"+totalpagoscli.getFloat("total")+".\n\n",fontroja));
+            }
+            ResultSet tabla6 = st.executeQuery("select date_format(pagosclientes.fechapagocliente, '%d/%m/%Y'), idpagosclientes, sum(importepago), clientes.apellido, clientes.nombre from picar_db.pagosclientes join picar_db.clientes on pagosclientes.cliente_id=clientes.idcliente where pagosclientes.idpagosclientes!=0 and pagosclientes.fechapagocliente "+fechas+" group by idpagosclientes order by pagosclientes.fechapagocliente asc;");
+            if(tabla6.next()){
+                PdfPTable tabla = new PdfPTable(4);
+                tabla.setWidthPercentage(100);
+                float[] columnWidths = {12,15,15,48};
+                tabla.setWidths(columnWidths);
+                PdfPCell cabeza1 = new PdfPCell(new Phrase("FECHA", fuentecabeza));
+                cabeza1.setBackgroundColor(BaseColor.GREEN);
+                cabeza1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza1.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza2 = new PdfPCell(new Phrase("ID PAGO", fuentecabeza));
+                cabeza2.setBackgroundColor(BaseColor.GREEN);
+                cabeza2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza2.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza3 = new PdfPCell(new Phrase("TOTAL", fuentecabeza));
+                cabeza3.setBackgroundColor(BaseColor.GREEN);
+                cabeza3.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza3.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza4 = new PdfPCell(new Phrase("CLIENTE", fuentecabeza));
+                cabeza4.setBackgroundColor(BaseColor.GREEN);
+                cabeza4.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza4.setVerticalAlignment(Element.ALIGN_CENTER);
+                tabla.addCell(cabeza1);
+                tabla.addCell(cabeza2);
+                tabla.addCell(cabeza3);
+                tabla.addCell(cabeza4);
+                do{
+                        PdfPCell celdauno = new PdfPCell(new Phrase(tabla6.getString(1), fuentetabla));
+                        celdauno.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdauno.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdados = new PdfPCell(new Phrase(tabla6.getString(2), fuentetabla));
+                        celdados.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdados.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdatres = new PdfPCell(new Phrase(Float.toString(tabla6.getFloat(3)), fuentetabla));
+                        celdatres.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdatres.setVerticalAlignment(Element.ALIGN_CENTER);
+                    String nombrecompleto = tabla6.getString(4)+" "+tabla6.getString(5);
+                        PdfPCell celdacuatro = new PdfPCell(new Phrase(nombrecompleto, fuentetabla));
+                        celdacuatro.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdacuatro.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tabla.addCell(celdauno);
+                    tabla.addCell(celdados);
+                    tabla.addCell(celdatres);
+                    tabla.addCell(celdacuatro);
+                    } while (tabla6.next());
+                        documento.add(tabla);
+            }
+            documento.add(new Paragraph ("\nTotal de pagos recibidos por cliente:\n\n",font));
+            ResultSet tabla7 = st.executeQuery("select pagosclientes.fechapagocliente, clientes.apellido, clientes.nombre, sum(pagosclientes.importepago) from picar_db.pagosclientes join picar_db.clientes on pagosclientes.cliente_id=clientes.idcliente where pagosclientes.idpagosclientes!=0 and pagosclientes.fechapagocliente "+fechas+" group by pagosclientes.cliente_id order by pagosclientes.importepago desc;");
+            if(tabla7.next()){
+                PdfPTable tabla = new PdfPTable(2);
+                tabla.setWidthPercentage(100);
+                float[] columnWidths = {70,30};
+                tabla.setWidths(columnWidths);
+                PdfPCell cabeza1 = new PdfPCell(new Phrase("CLIENTE", fuentecabeza));
+                cabeza1.setBackgroundColor(BaseColor.GREEN);
+                cabeza1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza1.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza2 = new PdfPCell(new Phrase("TOTAL PAGO", fuentecabeza));
+                cabeza2.setBackgroundColor(BaseColor.GREEN);
+                cabeza2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza2.setVerticalAlignment(Element.ALIGN_CENTER);
+                tabla.addCell(cabeza1);
+                tabla.addCell(cabeza2);
+                do{
+                    String nombrecompleto = tabla7.getString(2)+" "+tabla7.getString(3);
+                        PdfPCell celdauno = new PdfPCell(new Phrase(nombrecompleto, fuentetabla));
+                        celdauno.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdauno.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdados = new PdfPCell(new Phrase(Float.toString(tabla7.getFloat(4)), fuentetabla));
+                        celdados.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdados.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tabla.addCell(celdauno);
+                    tabla.addCell(celdados);
+                    } while (tabla7.next());
+                        documento.add(tabla);
+            }
+            documento.add(new Paragraph ("\nTotal de pagos recibidos por tipo:\n\n",font));
+            ResultSet tabla8 = st.executeQuery("select pagosclientes.fechapagocliente, pagosclientes.tipopago, sum(pagosclientes.importepago) as total from picar_db.pagosclientes where pagosclientes.idpagosclientes!=0 and pagosclientes.fechapagocliente "+fechas+" group by pagosclientes.tipopago order by total desc;");
+            if(tabla8.next()){
+                PdfPTable tabla = new PdfPTable(2);
+                tabla.setWidthPercentage(100);
+                float[] columnWidths = {70,30};
+                tabla.setWidths(columnWidths);
+                PdfPCell cabeza1 = new PdfPCell(new Phrase("TIPO DE PAGO", fuentecabeza));
+                cabeza1.setBackgroundColor(BaseColor.GREEN);
+                cabeza1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza1.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza2 = new PdfPCell(new Phrase("TOTAL", fuentecabeza));
+                cabeza2.setBackgroundColor(BaseColor.GREEN);
+                cabeza2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza2.setVerticalAlignment(Element.ALIGN_CENTER);
+                tabla.addCell(cabeza1);
+                tabla.addCell(cabeza2);
+                do{
+                        PdfPCell celdauno = new PdfPCell(new Phrase(tabla8.getString(2), fuentetabla));
+                        celdauno.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdauno.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdados = new PdfPCell(new Phrase(Float.toString(tabla8.getFloat(3)), fuentetabla));
+                        celdados.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdados.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tabla.addCell(celdauno);
+                    tabla.addCell(celdados);
+                    } while (tabla8.next());
+                        documento.add(tabla);
+            }
+            documento.add(new Paragraph ("\n",font));
+            Paragraph pagospro_titulo = new Paragraph ("PAGOS A PROVEEDORES",fonttitulo);
+            pagospro_titulo.setAlignment(Element.ALIGN_CENTER);
+            documento.add(pagospro_titulo);
+            ResultSet countpagospro = st.executeQuery("select count(distinct idpagosproveedores) as cantpagospro from picar_db.pagosproveedores where pagosproveedores.idpagosproveedores!=0 AND fechapagoprov "+fechas+";");
+            if(countpagospro.next()){
+                documento.add(new Paragraph ("\nCantidad de pagos realizados: "+countpagospro.getString("cantpagospro")+".\n",font));
+            }
+            ResultSet totalpagospro = st.executeQuery("select sum(importepagoprov) as total from picar_db.pagosproveedores where pagosproveedores.idpagosproveedores!=0 AND fechapagoprov "+fechas+";");
+            if(totalpagospro.next()){
+                documento.add(new Paragraph ("Total de pagos realizados: $"+totalpagospro.getFloat("total")+".\n\n",fontroja));
+            }
+            ResultSet tabla9 = st.executeQuery("select date_format(pagosproveedores.fechapagoprov, '%d/%m/%Y') as fecha,pagosproveedores.idpagosproveedores, sum(pagosproveedores.importepagoprov) as total, proveedores.proveedor from picar_db.pagosproveedores join picar_db.proveedores on pagosproveedores.proveedor_id=proveedores.idproveedores where pagosproveedores.idpagosproveedores!=0 and pagosproveedores.fechapagoprov "+fechas+" group by pagosproveedores.idpagosproveedores order by fecha asc;");
+            if(tabla9 .next()){
+                PdfPTable tabla = new PdfPTable(4);
+                tabla.setWidthPercentage(100);
+                float[] columnWidths = {12,15,15,48};
+                tabla.setWidths(columnWidths);
+                PdfPCell cabeza1 = new PdfPCell(new Phrase("FECHA", fuentecabeza));
+                cabeza1.setBackgroundColor(BaseColor.CYAN);
+                cabeza1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza1.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza2 = new PdfPCell(new Phrase("ID PAGO", fuentecabeza));
+                cabeza2.setBackgroundColor(BaseColor.CYAN);
+                cabeza2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza2.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza3 = new PdfPCell(new Phrase("TOTAL", fuentecabeza));
+                cabeza3.setBackgroundColor(BaseColor.CYAN);
+                cabeza3.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza3.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza4 = new PdfPCell(new Phrase("PROVEEDOR", fuentecabeza));
+                cabeza4.setBackgroundColor(BaseColor.CYAN);
+                cabeza4.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza4.setVerticalAlignment(Element.ALIGN_CENTER);
+                tabla.addCell(cabeza1);
+                tabla.addCell(cabeza2);
+                tabla.addCell(cabeza3);
+                tabla.addCell(cabeza4);
+                do{
+                        PdfPCell celdauno = new PdfPCell(new Phrase(tabla9.getString(1), fuentetabla));
+                        celdauno.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdauno.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdados = new PdfPCell(new Phrase(tabla9.getString(2), fuentetabla));
+                        celdados.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdados.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdatres = new PdfPCell(new Phrase(Float.toString(tabla9.getFloat(3)), fuentetabla));
+                        celdatres.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdatres.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdacuatro = new PdfPCell(new Phrase(tabla9.getString(4), fuentetabla));
+                        celdacuatro.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdacuatro.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tabla.addCell(celdauno);
+                    tabla.addCell(celdados);
+                    tabla.addCell(celdatres);
+                    tabla.addCell(celdacuatro);
+                    } while (tabla9.next());
+                        documento.add(tabla);
+            }
+            documento.add(new Paragraph ("\nTotal de pagos realizados por proveedor:\n\n",font));
+            ResultSet tabla10 = st.executeQuery("SELECT pagosproveedores.fechapagoprov, proveedores.proveedor, sum(pagosproveedores.importepagoprov) as total from picar_db.pagosproveedores join picar_db.proveedores on pagosproveedores.proveedor_id=proveedores.idproveedores where pagosproveedores.idpagosproveedores!=0 and pagosproveedores.fechapagoprov "+fechas+" group by pagosproveedores.proveedor_id order by total desc;");
+            if(tabla10.next()){
+                PdfPTable tabla = new PdfPTable(2);
+                tabla.setWidthPercentage(100);
+                float[] columnWidths = {70,30};
+                tabla.setWidths(columnWidths);
+                PdfPCell cabeza1 = new PdfPCell(new Phrase("PROVEEDOR", fuentecabeza));
+                cabeza1.setBackgroundColor(BaseColor.CYAN);
+                cabeza1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza1.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza2 = new PdfPCell(new Phrase("TOTAL PAGO", fuentecabeza));
+                cabeza2.setBackgroundColor(BaseColor.CYAN);
+                cabeza2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza2.setVerticalAlignment(Element.ALIGN_CENTER);
+                tabla.addCell(cabeza1);
+                tabla.addCell(cabeza2);
+                do{
+                        PdfPCell celdauno = new PdfPCell(new Phrase(tabla10.getString(2), fuentetabla));
+                        celdauno.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdauno.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdados = new PdfPCell(new Phrase(Float.toString(tabla10.getFloat(3)), fuentetabla));
+                        celdados.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdados.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tabla.addCell(celdauno);
+                    tabla.addCell(celdados);
+                    } while (tabla10.next());
+                        documento.add(tabla);
+            }
+            documento.add(new Paragraph ("\nTotal de pagos realizados por tipo:\n\n",font));
+            ResultSet tabla11 = st.executeQuery("select pagosproveedores.fechapagoprov, pagosproveedores.tipopagoprov, sum(pagosproveedores.importepagoprov) as total from picar_db.pagosproveedores where idpagosproveedores!=0 and pagosproveedores.fechapagoprov "+fechas+" group by pagosproveedores.tipopagoprov order by total desc;");
+            if(tabla11.next()){
+                PdfPTable tabla = new PdfPTable(2);
+                tabla.setWidthPercentage(100);
+                float[] columnWidths = {70,30};
+                tabla.setWidths(columnWidths);
+                PdfPCell cabeza1 = new PdfPCell(new Phrase("TIPO DE PAGO", fuentecabeza));
+                cabeza1.setBackgroundColor(BaseColor.CYAN);
+                cabeza1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza1.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza2 = new PdfPCell(new Phrase("TOTAL", fuentecabeza));
+                cabeza2.setBackgroundColor(BaseColor.CYAN);
+                cabeza2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza2.setVerticalAlignment(Element.ALIGN_CENTER);
+                tabla.addCell(cabeza1);
+                tabla.addCell(cabeza2);
+                do{
+                        PdfPCell celdauno = new PdfPCell(new Phrase(tabla11.getString(2), fuentetabla));
+                        celdauno.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdauno.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdados = new PdfPCell(new Phrase(Float.toString(tabla11.getFloat(3)), fuentetabla));
+                        celdados.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdados.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tabla.addCell(celdauno);
+                    tabla.addCell(celdados);
+                    } while (tabla11.next());
+                        documento.add(tabla);
+            }
+            documento.add(new Paragraph ("\n",font));
+            Paragraph saldos_titulo = new Paragraph ("SALDOS Y DEUDAS",fonttitulo);
+            saldos_titulo.setAlignment(Element.ALIGN_CENTER);
+            documento.add(saldos_titulo);
+            documento.add(new Paragraph ("\nSaldos totales de clientes hasta la fecha "+fechahoy+".\n",font));
+            ResultSet totalcobros = st.executeQuery("SELECT sum(t2.ventas - t1.cobros) AS totalcobros FROM (SELECT SUM(pagosclientes.importepago) AS cobros FROM picar_db.pagosclientes where pagosclientes.idpagosclientes !=0) AS t1 CROSS JOIN (SELECT SUM(remitos.cantidad*remitos.precio_remito) AS ventas FROM picar_db.remitos where remitos.idremitos!=0) AS t2;\n");
+            if(totalcobros.next()){
+                documento.add(new Paragraph ("Total de saldos a cobrar: $"+totalcobros.getFloat("totalcobros")+".\n\n",fontroja));
+            }
+            ResultSet tabla12 = st.executeQuery("SELECT t1.id as cliente_id, clientes.apellido, clientes.nombre, (t2.ventas - t1.cobros) AS saldo FROM (SELECT pagosclientes.cliente_id as id, SUM(pagosclientes.importepago) AS cobros FROM picar_db.pagosclientes where pagosclientes.idpagosclientes !=0 group by pagosclientes.cliente_id) AS t1 CROSS JOIN (SELECT remitos.cliente_id as id, SUM(remitos.cantidad*remitos.precio_remito) AS ventas FROM picar_db.remitos where remitos.idremitos!=0 group by remitos.cliente_id) AS t2 on t1.id=t2.id join picar_db.clientes on clientes.idcliente=t1.id order by saldo desc;");
+            if(tabla12.next()){
+                PdfPTable tabla = new PdfPTable(3);
+                tabla.setWidthPercentage(100);
+                float[] columnWidths = {20,60,20};
+                tabla.setWidths(columnWidths);
+                PdfPCell cabeza1 = new PdfPCell(new Phrase("ID CLIENTE", fuentecabeza));
+                cabeza1.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                cabeza1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza1.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza2 = new PdfPCell(new Phrase("CLIENTE", fuentecabeza));
+                cabeza2.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                cabeza2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza2.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza3 = new PdfPCell(new Phrase("SALDO", fuentecabeza));
+                cabeza3.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                cabeza3.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza3.setVerticalAlignment(Element.ALIGN_CENTER);
+                tabla.addCell(cabeza1);
+                tabla.addCell(cabeza2);
+                tabla.addCell(cabeza3);
+                do{
+                        PdfPCell celdauno = new PdfPCell(new Phrase(tabla12.getString(1), fuentetabla));
+                        celdauno.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdauno.setVerticalAlignment(Element.ALIGN_CENTER);
+                    String nombrecompleto = tabla12.getString(2)+" "+tabla12.getString(3);
+                        PdfPCell celdados = new PdfPCell(new Phrase(nombrecompleto, fuentetabla));
+                        celdados.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdados.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdatres = new PdfPCell(new Phrase(Float.toString(tabla12.getFloat(4)), fuentetablared));
+                        celdatres.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdatres.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tabla.addCell(celdauno);
+                    tabla.addCell(celdados);
+                    tabla.addCell(celdatres);
+                    } while (tabla12.next());
+                        documento.add(tabla);
+            }
+            documento.add(new Paragraph ("\nDeudas totales a proveedores hasta la fecha "+fechahoy+".\n",font));
+            ResultSet totaldeudas= st.executeQuery("SELECT sum(t2.ventas - t1.cobros) AS totaldeudas FROM (SELECT SUM(pagosproveedores.importepagoprov) AS cobros FROM picar_db.pagosproveedores where pagosproveedores.idpagosproveedores!=0) AS t1 CROSS JOIN (SELECT SUM(compras.cantidad_compra*compras.precio_compra) AS ventas FROM picar_db.compras where compras.idcompras!=0) AS t2;");
+            if(totaldeudas.next()){
+                documento.add(new Paragraph ("Total de deudas a pagar: $"+totaldeudas.getFloat("totaldeudas")+".\n\n",fontroja));
+            }
+            ResultSet tabla13 = st.executeQuery("SELECT proveedores.proveedor,(t2.ventas - t1.cobros) AS saldo FROM (SELECT pagosproveedores.proveedor_id as id, SUM(pagosproveedores.importepagoprov) AS cobros FROM picar_db.pagosproveedores where pagosproveedores.idpagosproveedores!=0 group by pagosproveedores.proveedor_id) AS t1 CROSS JOIN (SELECT compras.proveedor_id as id, SUM(compras.cantidad_compra*compras.precio_compra) AS ventas FROM picar_db.compras where compras.idcompras!=0 group by compras.proveedor_id) AS t2 on t1.id=t2.id join picar_db.proveedores on proveedores.idproveedores=t1.id order by saldo desc;");
+            if(tabla13.next()){
+                PdfPTable tabla = new PdfPTable(2);
+                tabla.setWidthPercentage(100);
+                float[] columnWidths = {70,30};
+                tabla.setWidths(columnWidths);
+                PdfPCell cabeza1 = new PdfPCell(new Phrase("PROVEEDOR", fuentecabeza));
+                cabeza1.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                cabeza1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza1.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell cabeza2 = new PdfPCell(new Phrase("DEUDA", fuentecabeza));
+                cabeza2.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                cabeza2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cabeza2.setVerticalAlignment(Element.ALIGN_CENTER);
+                tabla.addCell(cabeza1);
+                tabla.addCell(cabeza2);
+                do{
+                        PdfPCell celdauno = new PdfPCell(new Phrase(tabla13.getString(1), fuentetabla));
+                        celdauno.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdauno.setVerticalAlignment(Element.ALIGN_CENTER);
+                        PdfPCell celdados = new PdfPCell(new Phrase(Float.toString(tabla13.getFloat(2)), fuentetablared));
+                        celdados.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        celdados.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tabla.addCell(celdauno);
+                    tabla.addCell(celdados);
+                    } while (tabla13.next());
+                        documento.add(tabla);
+            }
+            documento.close();
+            File file = new File(ruta+directorio);
+            Desktop.getDesktop().open(file);
+        }catch (Exception e) {
+                System.out.println(e);
+                JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+                System.exit(0);
+        }
         VentanaPrincipal inicio = new VentanaPrincipal();
         //inicio.setDefaultCloseOperation(inicio.HIDE_ON_CLOSE);
         inicio.setLocationRelativeTo(null);
         inicio.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -248,9 +895,6 @@ public class Informes extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 

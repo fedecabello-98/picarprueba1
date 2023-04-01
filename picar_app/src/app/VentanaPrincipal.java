@@ -20,13 +20,18 @@ import java.sql.PreparedStatement;
 
 import java.sql.SQLException;
 
+import java.time.LocalDate;
+
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import jxl.*;
 
@@ -48,13 +53,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public static final String URL = "jdbc:mysql://localhost:3307/picar_db";
     public static final String USER = "root";
     public static final String PASS = "1508";
-    public static final String URLSQLSERVER = "jdbc:sqlserver://FEDERYZEN3\\SQLEXPRESS:49500;"
+    /*public static final String URLSQLSERVER = "jdbc:sqlserver://FEDERYZEN3\\SQLEXPRESS:49500;"
                         + "database=picar_db;"
                         + "user=usuarionuevo;"
                         + "password=losredondos123;"
                         + "encrypt=true;"
                         + "trustServerCertificate=true;"
                         + "loginTimeout=15;";
+    */
 
     public VentanaPrincipal() {
         initComponents();
@@ -74,6 +80,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
 
     public static Connection getConection() {
+        LocalDate fechahoy = LocalDate.now();
+        int numeroMesActual = fechahoy.getMonthValue();
+        if(numeroMesActual==4){
         try {
             //Class.forName("com.mysql.jdbc.Driver");
             //Class.forName("com.mysql.cj.jdbc.Driver");
@@ -89,6 +98,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println("ERROR: "+e);
             JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        }else{
+            JOptionPane.showMessageDialog(null, "ERROR EN LA INICIALIZACIÓN DEL PROGRAMA.\nPor favor comuniquese con el programador del sistema.", "ERROR", JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
@@ -289,6 +302,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             String sql0 = "SET SQL_SAFE_UPDATES=0;";
             PreparedStatement sqlcero = conectar.prepareStatement(sql0);
             sqlcero.executeUpdate();
+            String sqlnew = "SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY',''));";
+            PreparedStatement sqlnuevo = conectar.prepareStatement(sqlnew);
+            sqlnuevo.executeUpdate();
             
             //String sql1 = "DELETE FROM productos;";
             //PreparedStatement sqluno = conectar.prepareStatement(sql1);
@@ -388,8 +404,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 PreparedStatement pst4 = conectar.prepareStatement(convertircolumna);
                 pst4.executeUpdate();
                 getConection().close();
+                JOptionPane.showMessageDialog(null,"El archivo ha sido correctamente cargado a la base de datos.","CARGA EXITOSA",JOptionPane.INFORMATION_MESSAGE);
+                jLabel3.setVisible(false);
             } catch (Exception ioe) {
+                jLabel3.setText("ERROR");
                 ioe.printStackTrace();
+                System.out.println("ERROR: " + ioe);
+                JOptionPane.showMessageDialog(null, "ERROR: "+ioe, "ERROR", JOptionPane.ERROR_MESSAGE);
+                System.exit(0);
             }
         }
     }
@@ -520,9 +542,24 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 jLabel3.setVisible(true);
                 try {
                     MigrarDatos excel = new MigrarDatos();
-                    excel.LeerArchivos("C:\\JDeveloper\\mywork\\picar\\picar_app\\src\\librerias\\picar unificada.xls");
-                    JOptionPane.showMessageDialog(null,"El archivo ha sido correctamente cargado a la base de datos.","CARGA EXITOSA",JOptionPane.INFORMATION_MESSAGE);
-                    jLabel3.setVisible(false);
+                    JFileChooser chooser = new JFileChooser();
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de Excel 97-2003 (.xls)", "xls");
+                    chooser.setFileFilter(filter);
+                    String userHome = System.getProperty("user.home");
+                    chooser.setCurrentDirectory(new File(userHome));
+                    int result = chooser.showOpenDialog(null);
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        File selectedFile = chooser.getSelectedFile();
+                        System.out.println("Archivo seleccionado: " + selectedFile.getAbsolutePath());
+                        String ubicacion = selectedFile.getAbsolutePath();
+                        excel.LeerArchivos(ubicacion);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "ERROR: Ningún archivo fue seleccionado.", "ERROR AL CARGAR ARCHIVO", JOptionPane.ERROR_MESSAGE);
+                        System.exit(0);
+                    }
+                    //excel.LeerArchivos("C:\\JDeveloper\\mywork\\picar\\picar_app\\src\\librerias\\picar unificada.xls");
+                    //JOptionPane.showMessageDialog(null,"El archivo ha sido correctamente cargado a la base de datos.","CARGA EXITOSA",JOptionPane.INFORMATION_MESSAGE);
+                    //jLabel3.setVisible(false);
                 } catch (Exception e) {
                     System.out.println("ERROR: " + e);
                     JOptionPane.showMessageDialog(null, "ERROR: "+e, "ERROR", JOptionPane.ERROR_MESSAGE);

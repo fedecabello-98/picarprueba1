@@ -142,8 +142,14 @@
       <hash n="runConfigurationDefinitions">
          <hash n="Default">
             <value n="custom" v="false"/>
+            <list n="EnvironmentVariables"/>
             <value n="name" v="Default"/>
+            <hash n="oracle.jdevimpl.runner.xslt.XSLTConfiguration">
+               <value n="showInputFile" v="false"/>
+               <value n="showOutputFile" v="false"/>
+            </hash>
             <url n="targetURL" path="src/app/VentanaPrincipal.java"/>
+            <value n="useProxy" v="false"/>
          </hash>
       </hash>
    </hash>
@@ -151,14 +157,6 @@
       <list n="exportedReferences">
          <hash>
             <value n="id" v="Commons-collections4-4.1.jar"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <value n="id" v="Jxl-2.6.12.1.jar"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <value n="id" v="Mysql-connector-java-8.0.25.jar"/>
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
@@ -193,6 +191,18 @@
             <value n="id" v="Junit-4.6.jar"/>
             <value n="isJDK" v="false"/>
          </hash>
+         <hash>
+            <value n="id" v="Itext5-itextpdf-5.5.12.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Mysql-connector-java-8.0.25.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Jxl-2.6.12.1.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
       </list>
       <hash n="internalDefinitions">
          <list n="libraryDefinitions">
@@ -203,24 +213,6 @@
                <value n="deployedByDefault" v="true"/>
                <value n="description" v="Commons-collections4-4.1.jar"/>
                <value n="id" v="Commons-collections4-4.1.jar"/>
-               <value n="locked" v="true"/>
-            </hash>
-            <hash>
-               <list n="classPath">
-                  <url path="src/librerias/POI 3.6/jxl-2.6.12.1.jar" jar-entry=""/>
-               </list>
-               <value n="deployedByDefault" v="true"/>
-               <value n="description" v="Jxl-2.6.12.1.jar"/>
-               <value n="id" v="Jxl-2.6.12.1.jar"/>
-               <value n="locked" v="true"/>
-            </hash>
-            <hash>
-               <list n="classPath">
-                  <url path="src/librerias/POI 3.6/mysql-connector-java-8.0.25.jar" jar-entry=""/>
-               </list>
-               <value n="deployedByDefault" v="true"/>
-               <value n="description" v="Mysql-connector-java-8.0.25.jar"/>
-               <value n="id" v="Mysql-connector-java-8.0.25.jar"/>
                <value n="locked" v="true"/>
             </hash>
             <hash>
@@ -295,19 +287,38 @@
                <value n="id" v="Junit-4.6.jar"/>
                <value n="locked" v="true"/>
             </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="src/librerias/itext5-5.5.12/itext5-itextpdf-5.5.12.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Itext5-itextpdf-5.5.12.jar"/>
+               <value n="id" v="Itext5-itextpdf-5.5.12.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="src/librerias/mysql-connector/mysql-connector-java-8.0.25.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Mysql-connector-java-8.0.25.jar"/>
+               <value n="id" v="Mysql-connector-java-8.0.25.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="src/librerias/jxl-2.6/jxl-2.6.12.1.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Jxl-2.6.12.1.jar"/>
+               <value n="id" v="Jxl-2.6.12.1.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
          </list>
       </hash>
       <list n="libraryReferences">
          <hash>
             <value n="id" v="Commons-collections4-4.1.jar"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <value n="id" v="Jxl-2.6.12.1.jar"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <value n="id" v="Mysql-connector-java-8.0.25.jar"/>
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
@@ -340,6 +351,18 @@
          </hash>
          <hash>
             <value n="id" v="Junit-4.6.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Itext5-itextpdf-5.5.12.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Mysql-connector-java-8.0.25.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Jxl-2.6.12.1.jar"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>

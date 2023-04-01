@@ -29,6 +29,8 @@ public class Ventas extends javax.swing.JFrame {
     public Ventas() {
         initComponents();
         LlenarCombo.conectar();
+        jLabel3.setVisible(false);
+        jComboBox1.setVisible(false);
     }
 
     /** This method is called from within the constructor to

@@ -1,7 +1,6 @@
 
 package app;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 
 import java.sql.ResultSet;

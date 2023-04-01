@@ -16,13 +16,14 @@ public class LlenarCombo {
            String URL = "jdbc:mysql://localhost:3307/picar_db";
            String USER="root";
            String PASS="1508";
-           String URLSQLSERVER = "jdbc:sqlserver://FEDERYZEN3\\SQLEXPRESS:49500;"
+           /*String URLSQLSERVER = "jdbc:sqlserver://FEDERYZEN3\\SQLEXPRESS:49500;"
                         + "database=picar_db;"
                         + "user=usuarionuevo;"
                         + "password=losredondos123;"
                         + "encrypt=true;"
                         + "trustServerCertificate=true;"
                         + "loginTimeout=15;";
+           */
            try {
                Class.forName("com.mysql.cj.jdbc.Driver");
                conexion=DriverManager.getConnection(URL,USER,PASS);

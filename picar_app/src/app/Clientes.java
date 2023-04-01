@@ -2,6 +2,10 @@
 package app;
 
 
+import com.itextpdf.text.BaseColor;
+
+import java.awt.event.KeyEvent;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,6 +13,38 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Font;
+
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+
+import com.itextpdf.text.pdf.BaseFont;
+
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPageEventHelper;
+import com.itextpdf.text.pdf.PdfTemplate;
+
+import java.io.FileOutputStream;
+
+        import java.awt.Desktop;
+        import java.io.File;
+
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
+
+import org.apache.poi.ss.usermodel.FontFamily;
 
 
 /**
@@ -126,6 +162,7 @@ public class Clientes extends javax.swing.JFrame {
         jTextField14 = new javax.swing.JTextField();
         jLabel21 = new javax.swing.JLabel();
         jComboBox7 = new javax.swing.JComboBox<>();
+        jButton9 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -172,6 +209,11 @@ public class Clientes extends javax.swing.JFrame {
                 jTextField1ActionPerformed(evt);
             }
         });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Calibri", 0, 22)); // NOI18N
         jLabel3.setText("DNI:");
@@ -187,6 +229,11 @@ public class Clientes extends javax.swing.JFrame {
                 jTextField2ActionPerformed(evt);
             }
         });
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField2KeyTyped(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Calibri", 0, 22)); // NOI18N
         jLabel4.setText("CUIL/CUIT:");
@@ -196,6 +243,11 @@ public class Clientes extends javax.swing.JFrame {
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField3ActionPerformed(evt);
+            }
+        });
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField3KeyTyped(evt);
             }
         });
 
@@ -219,6 +271,11 @@ public class Clientes extends javax.swing.JFrame {
         jTextField5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField5ActionPerformed(evt);
+            }
+        });
+        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField5KeyTyped(evt);
             }
         });
 
@@ -269,6 +326,11 @@ public class Clientes extends javax.swing.JFrame {
         jTextField10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField10ActionPerformed(evt);
+            }
+        });
+        jTextField10.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField10KeyTyped(evt);
             }
         });
 
@@ -432,6 +494,11 @@ public class Clientes extends javax.swing.JFrame {
                 jTextField13ActionPerformed(evt);
             }
         });
+        jTextField13.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField13KeyTyped(evt);
+            }
+        });
 
         jTextField14.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jTextField14.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -439,6 +506,11 @@ public class Clientes extends javax.swing.JFrame {
         jTextField14.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField14ActionPerformed(evt);
+            }
+        });
+        jTextField14.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField14KeyTyped(evt);
             }
         });
 
@@ -449,6 +521,15 @@ public class Clientes extends javax.swing.JFrame {
         jComboBox7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox7ActionPerformed(evt);
+            }
+        });
+
+        jButton9.setBackground(java.awt.Color.cyan);
+        jButton9.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jButton9.setText("Generar informe de cliente");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
             }
         });
 
@@ -511,114 +592,115 @@ public class Clientes extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(11, 11, 11)
+                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
+                        .addComponent(jLabel7)
+                        .addGap(13, 13, 13)
+                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11)
+                        .addComponent(jLabel8)
+                        .addGap(13, 13, 13)
+                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel20)
+                        .addGap(13, 13, 13)
+                        .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8)
+                        .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(9, 9, 9)
+                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 888, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(9, 9, 9)
+                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 888, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addGap(11, 11, 11)
+                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 920, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(15, 15, 15)
+                        .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 790, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addGap(13, 13, 13)
+                        .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel21)
+                        .addGap(12, 12, 12)
+                        .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addGap(9, 9, 9)
+                        .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel13)
+                        .addGap(7, 7, 7)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel14)
+                        .addGap(14, 14, 14)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel15)
+                        .addGap(9, 9, 9)
+                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel16)
+                        .addGap(8, 8, 8)
+                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(13, 13, 13)
+                        .addComponent(jLabel17)
+                        .addGap(11, 11, 11)
+                        .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel18)
+                        .addGap(8, 8, 8)
+                        .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel19)
+                        .addGap(10, 10, 10)
+                        .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 829, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8)
+                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(2, 2, 2)
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton7)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jButton1))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 850, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 613, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(2, 2, 2)
-                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 981, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(9, 9, 9)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 930, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(11, 11, 11)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel7)
-                                .addGap(13, 13, 13)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(11, 11, 11)
-                                .addComponent(jLabel8)
-                                .addGap(13, 13, 13)
-                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel20)
-                                .addGap(13, 13, 13)
-                                .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(8, 8, 8)
-                                .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(9, 9, 9)
-                                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 888, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addGap(9, 9, 9)
-                                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 888, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addGap(11, 11, 11)
-                                .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 920, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addGap(15, 15, 15)
-                                .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 790, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel11)
-                                .addGap(13, 13, 13)
-                                .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel21)
-                                .addGap(12, 12, 12)
-                                .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addGap(9, 9, 9)
-                                .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel13)
-                                .addGap(7, 7, 7)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel14)
-                                .addGap(14, 14, 14)
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel15)
-                                .addGap(9, 9, 9)
-                                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel16)
-                                .addGap(8, 8, 8)
-                                .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(13, 13, 13)
-                                .addComponent(jLabel17)
-                                .addGap(11, 11, 11)
-                                .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel18)
-                                .addGap(8, 8, 8)
-                                .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel19)
-                                .addGap(10, 10, 10)
-                                .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 829, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(8, 8, 8)
-                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 1, Short.MAX_VALUE)))
-                .addContainerGap())
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 981, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jButton9)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addGap(9, 9, 9)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 930, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -636,7 +718,9 @@ public class Clientes extends javax.swing.JFrame {
                         .addGap(8, 8, 8)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton9)))))
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
@@ -740,7 +824,7 @@ public class Clientes extends javax.swing.JFrame {
         jTextField11.setText("");
         jTextField12.setText("");
         jTextField13.setText("-10");
-        jTextField14.setText("");
+        jTextField14.setText("0");
         jTextField1.requestFocus();
     }//GEN-LAST:event_jButton7ActionPerformed
 
@@ -852,7 +936,7 @@ public class Clientes extends javax.swing.JFrame {
         ResultSet idcliente = st.executeQuery("select picar_db.clientes.idcliente from picar_db.clientes order by picar_db.clientes.idcliente desc limit 1;");
         if(idcliente.next()){
         String registroid = idcliente.getString("idcliente");
-        st.executeUpdate("INSERT INTO picar_db.pagosclientes VALUES (0,"+registroid+",'',0,0,0,current_date());");
+        //st.executeUpdate("INSERT INTO picar_db.pagosclientes VALUES (0,"+registroid+",'',0,0,0,current_date());");
         ultimoMensajeMySQL="El cliente "+apellido+", "+nombre+" fue agregado con éxito al sistema.\nSu ID es: "+registroid+".";
         JOptionPane.showMessageDialog(null, ultimoMensajeMySQL, "INFORMACIÓN DEL SISTEMA", JOptionPane.INFORMATION_MESSAGE);
         jTextField1.setText(registroid);
@@ -1253,6 +1337,177 @@ public class Clientes extends javax.swing.JFrame {
         mcliente.modificarCliente(idcliente.replace(" ", "").trim(),dni.replace(" ", "").trim(),precuil.replace(" ", "").trim(),cuil.replace(" ", "").trim(),sucuil.replace(" ", "").trim(),desc1.replace(" ","").trim(),desc2.replace(" ","").trim(),nombre.toUpperCase().trim(),apellido.toUpperCase().trim(),alias.toUpperCase().trim(),email.toUpperCase().trim().replace(" ", ""),telefono.replace(" ","").trim(),direccion.toUpperCase().trim(),estado,categoria,vendedor,zona,pais,provincia,localidad,observaciones.toUpperCase().trim());
 
     }//GEN-LAST:event_jButton5ActionPerformed
+  
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+        String cliente = this.jTextField1.getText();
+        try{
+            Statement st = LlenarCombo.conexion.createStatement();
+            ResultSet registro = st.executeQuery("SELECT *,date_format(current_date(), '%d/%m/%Y') AS fechaformateada FROM picar_db.clientes WHERE idcliente="+cliente+";");
+            if(registro.next())
+            {
+                String traernombre = registro.getString("nombre");
+                String traerapellido = registro.getString("apellido");
+                String traerfechahoy = registro.getString("fechaformateada");
+                String traercuil = registro.getString("cuil");
+                Document documento = new Document(new Rectangle(PageSize.A4.rotate()));
+                String ruta = System.getProperty("user.home");
+                String directorio = "/Desktop/INFORME CLIENTE "+cliente+" "+traerapellido+" "+traernombre+" - "+traerfechahoy.replace("/",".")+".pdf";
+                PdfWriter.getInstance(documento, new FileOutputStream(ruta+directorio));
+                documento.open();
+                BaseFont baseFont = BaseFont.createFont("C:/Windows/Fonts/Calibri.ttf", BaseFont.WINANSI, BaseFont.EMBEDDED);
+                Font font = new Font(baseFont, 12, Font.BOLDITALIC);
+                //Font fuente = new Font(Font.FontFamily.COURIER, 11, Font.BOLD);
+                //fuente.setSize(11);
+                Image header = Image.getInstance("src/imagenes/picarlogo.png");
+                header.scaleToFit(250,1000);
+                header.setAlignment(Chunk.ALIGN_CENTER);
+                documento.add(header);
+                documento.add(new Paragraph ("Informe total de movimientos del cliente "+cliente+"-"+traerapellido+" "+traernombre+". CUIL: "+traercuil+".\nFecha: "+traerfechahoy+".\n",font));
+                ResultSet saldo = st.executeQuery("SELECT (t2.ventas - t1.cobros) AS saldo FROM (SELECT SUM(importepago) AS cobros FROM pagosclientes where pagosclientes.cliente_id="+cliente+") AS t1 CROSS JOIN (SELECT SUM( cantidad * precio_remito ) AS ventas FROM remitos where remitos.cliente_id="+cliente+") AS t2;");
+                if(saldo.next()){
+                float traersaldo = saldo.getFloat("saldo");
+                Font fontroja = new Font (baseFont,12, Font.BOLDITALIC, BaseColor.RED);
+                documento.add(new Paragraph ("SALDO: $"+traersaldo+"\n\n",fontroja));
+                }
+                Font fuentecabeza = new Font(Font.FontFamily.UNDEFINED,10,Font.BOLDITALIC);
+                Font fuentetabla = new Font(Font.FontFamily.UNDEFINED, 11, Font.BOLD);
+                PdfPTable tabla = new PdfPTable(6);
+                tabla.setWidthPercentage(100);
+                float[] columnWidths = {3, 3, 4, 19, 3, 4};
+                tabla.setWidths(columnWidths);
+                PdfPCell celdafecha = new PdfPCell(new Phrase("FECHA", fuentecabeza));
+                celdafecha.setBackgroundColor(BaseColor.ORANGE);
+                celdafecha.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celdafecha.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell celdatipo = new PdfPCell(new Phrase("TIPO", fuentecabeza));
+                celdatipo.setBackgroundColor(BaseColor.ORANGE);
+                celdatipo.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celdatipo.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell celdaid = new PdfPCell(new Phrase("ID", fuentecabeza));
+                celdaid.setBackgroundColor(BaseColor.ORANGE);
+                celdaid.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celdaid.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell celdadetalle = new PdfPCell(new Phrase("DETALLE", fuentecabeza));
+                celdadetalle.setBackgroundColor(BaseColor.ORANGE);
+                celdadetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celdadetalle.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell celdacheque = new PdfPCell(new Phrase("N° CHEQUE", fuentecabeza));
+                celdacheque.setBackgroundColor(BaseColor.ORANGE);
+                celdacheque.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celdacheque.setVerticalAlignment(Element.ALIGN_CENTER);
+                PdfPCell celdaimporte = new PdfPCell(new Phrase("IMPORTE", fuentecabeza));
+                celdaimporte.setBackgroundColor(BaseColor.ORANGE);
+                celdaimporte.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celdaimporte.setVerticalAlignment(Element.ALIGN_CENTER);
+                tabla.addCell(celdafecha);
+                tabla.addCell(celdatipo);
+                tabla.addCell(celdaid);
+                tabla.addCell(celdadetalle);
+                tabla.addCell(celdacheque);
+                tabla.addCell(celdaimporte);
+                ResultSet datos = st.executeQuery("SELECT date_format(remitos.fecharemito, '%d/%m/%Y') as fechas,'REMITO',remitos.idremitos,remitos.descripcion_remito,null,remitos.cantidad*remitos.precio_remito FROM picar_db.remitos WHERE remitos.idremitos!=0 AND remitos.cliente_id="+cliente+" UNION ALL SELECT date_format(pagosclientes.fechapagocliente, '%d/%m/%Y'),'PAGO',pagosclientes.idpagosclientes,pagosclientes.tipopago,pagosclientes.cheque_id,-importepago FROM picar_db.pagosclientes WHERE pagosclientes.idpagosclientes!=0 AND pagosclientes.cliente_id="+cliente+" ORDER BY str_to_date(fechas, '%d/%m/%Y') DESC;");
+                if(datos.next()){
+                    do{
+                            PdfPCell celdauno = new PdfPCell(new Phrase(datos.getString(1), fuentetabla));
+                            celdauno.setHorizontalAlignment(Element.ALIGN_CENTER);
+                            celdauno.setVerticalAlignment(Element.ALIGN_CENTER);
+                            PdfPCell celdados = new PdfPCell(new Phrase(datos.getString(2), fuentetabla));
+                            celdados.setHorizontalAlignment(Element.ALIGN_CENTER);
+                            celdados.setVerticalAlignment(Element.ALIGN_CENTER);
+                            PdfPCell celdatres = new PdfPCell(new Phrase(datos.getString(3), fuentetabla));
+                            celdatres.setHorizontalAlignment(Element.ALIGN_LEFT);
+                            celdatres.setVerticalAlignment(Element.ALIGN_CENTER);
+                            PdfPCell celdacuatro = new PdfPCell(new Phrase(datos.getString(4), fuentetabla));
+                            celdacuatro.setHorizontalAlignment(Element.ALIGN_LEFT);
+                            celdacuatro.setVerticalAlignment(Element.ALIGN_CENTER);
+                            PdfPCell celdacinco = new PdfPCell(new Phrase(datos.getString(5), fuentetabla));
+                            celdacinco.setHorizontalAlignment(Element.ALIGN_CENTER);
+                            celdacinco.setVerticalAlignment(Element.ALIGN_CENTER);
+                            PdfPCell celdaseis = new PdfPCell(new Phrase(Float.toString(datos.getFloat(6)), fuentetabla));
+                            celdaseis.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                            celdaseis.setVerticalAlignment(Element.ALIGN_CENTER);
+                        tabla.addCell(celdauno);
+                        tabla.addCell(celdados);
+                        tabla.addCell(celdatres);
+                        tabla.addCell(celdacuatro);
+                        tabla.addCell(celdacinco);
+                        tabla.addCell(celdaseis);
+                        } while (datos.next());
+                            documento.add(tabla);
+                }
+                documento.close();
+                File file = new File(ruta+directorio);
+                Desktop.getDesktop().open(file);
+            }
+        }catch (Exception e){
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "ERROR: Cliente no encontrado en el sistema. "+e, "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        // TODO add your handling code here:
+        char karakter = evt.getKeyChar();
+        if(!(((karakter >= '0') && (karakter <= '9') || (karakter == KeyEvent.VK_DELETE)))){
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField1KeyTyped
+
+    private void jTextField2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyTyped
+        // TODO add your handling code here:
+        char karakter = evt.getKeyChar();
+        if(!(((karakter >= '0') && (karakter <= '9') || (karakter == KeyEvent.VK_DELETE)))){
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField2KeyTyped
+
+    private void jTextField3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyTyped
+        // TODO add your handling code here:
+        char karakter = evt.getKeyChar();
+        if(!(((karakter >= '0') && (karakter <= '9') || (karakter == KeyEvent.VK_DELETE)))){
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField3KeyTyped
+
+    private void jTextField5KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyTyped
+        // TODO add your handling code here:
+        char karakter = evt.getKeyChar();
+        if(!(((karakter >= '0') && (karakter <= '9') || (karakter == KeyEvent.VK_DELETE)))){
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField5KeyTyped
+
+    private void jTextField10KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField10KeyTyped
+        // TODO add your handling code here:
+        char karakter = evt.getKeyChar();
+        if(!(((karakter >= '0') && (karakter <= '9') || (karakter == KeyEvent.VK_DELETE) || (karakter == '+')))){
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField10KeyTyped
+
+    private void jTextField13KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField13KeyTyped
+        // TODO add your handling code here:
+        char karakter = evt.getKeyChar();
+        if(!(((karakter >= '0') && (karakter <= '9') || (karakter == KeyEvent.VK_DELETE || (karakter == '-'))))){
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField13KeyTyped
+
+    private void jTextField14KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField14KeyTyped
+        // TODO add your handling code here:
+        char karakter = evt.getKeyChar();
+        if(!(((karakter >= '0') && (karakter <= '9') || (karakter == KeyEvent.VK_DELETE || (karakter == '-'))))){
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField14KeyTyped
 
     /**
      * @param args the command line arguments
@@ -1331,6 +1586,7 @@ public class Clientes extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
